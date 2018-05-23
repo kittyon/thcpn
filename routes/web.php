@@ -13,4 +13,5 @@
 
 Route::get('/', function () {
     return view('welcome');
+    //return response('this is version v1');
 });
