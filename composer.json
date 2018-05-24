@@ -15,6 +15,7 @@
         "liyu/dingo-serializer-switch": "^0.3.0",
         "overtrue/easy-sms": "^1.0",
         "socialiteproviders/weixin": "^4.0",
+        "summerblue/administrator": "^1.0",
         "toplan/laravel-sms": "~2.6",
         "tymon/jwt-auth": "1.0.0-rc.2"
     },

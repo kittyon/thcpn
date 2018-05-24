@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use Illuminate\Http\Request;
-use App\User;
+use App\Models\User;
 use App\Http\Requests\Api\UserRequest;
 use App\Transformers\UserTransformer;
 

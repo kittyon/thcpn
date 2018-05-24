@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Notifications\Notifiable;
@@ -38,5 +38,13 @@ class User extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [];
+    }
+
+    public function roles(){
+        return $this->belongsToMany('App\Models\Urole');
+    }
+
+    public function Devices(){
+      return $this->belongsToMany('App\Models\Device');
     }
 }

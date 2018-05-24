@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateDevicesTable extends Migration
+class CreateDeviceDataTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,13 @@ class CreateDevicesTable extends Migration
      */
     public function up()
     {
-        Schema::create('devices', function (Blueprint $table) {
+        Schema::create('device_data', function (Blueprint $table) {
             //
             $table->increments('id');
-            $table->string('name',50);
-            $table->string('iccid', 50);
-            $table->enum('version', ['1.0', '2.0']);
-            $table->enum('status', ['normal', 'abnormal']);
+            $table->integer('device_config_id')->unsigned();
+            $table->integer('device_id')->unsigned();
+            $table->json('data');
+            $table->timestamp('ts')->nullable();
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->softDeletes();
@@ -33,6 +33,6 @@ class CreateDevicesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('devices');
+        Schema::dropIfExists('device_data');
     }
 }
