@@ -3,13 +3,19 @@
 namespace App\Http\Controllers\Api\V1;
 
 use Auth;
-use App\User;
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Requests\Api\SocialAuthorizationRequest;
 use App\Http\Requests\Api\AuthorizationRequest;
+use Zend\Diactoros\Response as Psr7Response;
+use Psr\Http\Message\ServerRequestInterface;
+use League\OAuth2\Server\Exception\OAuthServerException;
+use League\OAuth2\Server\AuthorizationServer;
+use App\Traits\PassportToken;
 
 class AuthorizationsController extends Controller
 {
+    use PassportToken;
     //
     protected function respondWithToken($token)
     {
@@ -19,7 +25,7 @@ class AuthorizationsController extends Controller
             'expires_in' => \Auth::guard('api')->factory()->getTTL() * 60
         ]);
     }
-    public function store(AuthorizationRequest $request)
+    /*public function store(AuthorizationRequest $request)
     {
         $username = $request->username;
 
@@ -34,6 +40,14 @@ class AuthorizationsController extends Controller
         }
 
         return $this->respondWithToken($token)->setStatusCode(201);
+    }*/
+    public function store(AuthorizationRequest $originRequest, AuthorizationServer $server, ServerRequestInterface $serverRequest)
+    {
+        try {
+           return $server->respondToAccessTokenRequest($serverRequest, new Psr7Response)->withStatus(201);
+        } catch(OAuthServerException $e) {
+            return $this->response->errorUnauthorized($e->getMessage());
+        }
     }
 
     public function socialStore($type, SocialAuthorizationRequest $request)
@@ -83,8 +97,10 @@ class AuthorizationsController extends Controller
 
                 break;
         }
-        $token = Auth::guard('api')->fromUser($user);
-        return $this->respondWithToken($token)->setStatusCode(201);
+        $result = $this->getBearerTokenByUser($user, '1', false);
+        return $this->response->array($result)->setStatusCode(201);
+        //$token = Auth::guard('api')->fromUser($user);
+        //return $this->respondWithToken($token)->setStatusCode(201);
     }
 
     public function update()
@@ -95,7 +111,7 @@ class AuthorizationsController extends Controller
 
     public function destroy()
     {
-        Auth::guard('api')->logout();
+        $this->user()->token()->revoke();
         return $this->response->noContent();
     }
 }

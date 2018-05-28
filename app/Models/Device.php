@@ -15,7 +15,7 @@ class Device extends Model
     protected $fillable = ['name', 'version', 'iccid'];
 
     public function configs() {
-        return $this->hasMany('App\DeviceConfig');
+        return $this->hasMany('App\Models\DeviceConfig');
     }
 
     public function config() {
