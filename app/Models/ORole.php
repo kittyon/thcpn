@@ -2,12 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
-class ORole extends Model
+class Orole extends Base
 {
     //
     protected $fillable = ['name', 'display_name'];
+    protected $table = 'oroles';
 
     public function permissions() {
         return $this->belongsToMany('App\Models\Permission');

@@ -2,10 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
-class Permission extends Model
+class Permission extends Base
 {
     //
-    protected $fillable = ['name'];
+    protected $fillable = ['name','display_name'];
 }

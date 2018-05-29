@@ -28,7 +28,6 @@ $api->version('v1', function($api) {
 
 $api->version('v1', [
     'namespace' => 'App\Http\Controllers\Api\V1',
-    'middleware' => 'serializer:array'
 ], function($api) {
   $api->group([
           'middleware' => 'api.throttle',
@@ -42,6 +41,21 @@ $api->version('v1', [
               // 当前登录用户信息
               $api->get('user', 'UsersController@me')
                   ->name('api.user.show');
+              // 获取devices信息
+              $api->get('devices','DevicesController@index')->name('api.devices.index');
+              $api->get('device/{device_id}','DevicesController@show')->name('api.devices.show');
+              // 获取organization信息
+              $api->get('organizations','OrganizationsController@index')->name('api.organizations.index');
+              // 获取permission信息
+              $api->get('permissions','PermissionsController@index')->name('api.permissions.index');
+              // 获取device最新的config
+              $api->get('device/{device_id}/config','DeviceConfigController@last')->name('api.config.last');
+              $api->get('device/{device_id}/config/{config_id}','DeviceConfigController@show')->name('api.config.show');
+              // 更改device的config
+              $api->post('device/{device_id}/config','DeviceConfigController@store')->name('api.config.store');
+              // 获取device的data数据
+              $api->get('device/{device_id}/datas','DeviceDataController@index')->name('api.deviceData.index');
+
           });
       });
 

@@ -6,10 +6,13 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Http\Requests\Api\UserRequest;
 use App\Transformers\UserTransformer;
+use Illuminate\Support\Facades\Auth;
 
 class UsersController extends Controller
 {
     //
+    use PassportToken;
+
     public function store(UserRequest $request)
     {
         $verifyData = \Cache::get($request->verification_key);
@@ -25,6 +28,7 @@ class UsersController extends Controller
 
         $user = User::create([
             'name' => $request->name,
+            'email' => $request->email,
             'phone' => $verifyData['phone'],
             'password' => bcrypt($request->password),
         ]);
@@ -32,12 +36,11 @@ class UsersController extends Controller
         // 清除验证码缓存
         \Cache::forget($request->verification_key);
 
-        return $this->response->item($user, new UserTransformer())
-        ->setMeta([
-            'access_token' => \Auth::guard('api')->fromUser($user),
-            'token_type' => 'Bearer',
-            'expires_in' => \Auth::guard('api')->factory()->getTTL() * 60
-        ])->setStatusCode(201);
+        Auth::login($user);
+
+        $result = $this->getBearerTokenByUser($user, '1', false);
+        return $this->response->array($result)->setStatusCode(201);
+        
     }
     public function me()
     {

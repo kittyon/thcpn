@@ -71,8 +71,8 @@ return array(
      * @type closure
      */
     'permission' => function () {
-        return Auth::check();
-        //return true;
+        //return Auth::check();
+        return true;
     },
 
     /*

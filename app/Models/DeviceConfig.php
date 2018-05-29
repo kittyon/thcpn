@@ -2,9 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 
-class DeviceConfig extends Model
+class DeviceConfig extends Base
 {
     //
     protected $fillable = ['data', 'control', 'device_id'];
@@ -24,5 +23,9 @@ class DeviceConfig extends Model
 
     public function getControlAttribute($v) {
         return json_decode($v, true);
+    }
+
+    public function device(){
+      return $this->belongsTo('App\Models\Device');
     }
 }

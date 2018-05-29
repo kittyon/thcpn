@@ -33,7 +33,7 @@ class CreatePermissionTable extends Migration
 
             $table->primary(['permission_id', 'urole_id']);
         });
-        Schema::create('permission_orole', function (Blueprint $table) {
+        Schema::create('orole_permission', function (Blueprint $table) {
             $table->integer('permission_id')->unsigned();
             $table->integer('orole_id')->unsigned();
 
@@ -54,7 +54,7 @@ class CreatePermissionTable extends Migration
     public function down()
     {
         Schema::dropIfExists('permissions');
-        Schema::dropIfExists('permission_urole');
-        Schema::dropIfExists('permission_orole');
+        Schema::dropIfExists('urole_permission');
+        Schema::dropIfExists('orole_permission');
     }
 }
