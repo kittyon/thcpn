@@ -37,9 +37,6 @@ router.beforeEach((to, from, next) => {
     window.scrollTo(0, 0);
     // Auth验证
     if (to.meta.requireAuth) {  // 判断该路由是否需要登录权限
-        console.log(from);
-        console.log(to);
-        console.log(store.state.currentUser.AccessToken);
         if (store.state.currentUser.AccessToken) {  // 通过vuex state获取当前的token是否存在
             next();
         }

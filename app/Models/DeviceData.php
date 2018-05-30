@@ -2,9 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 
-class DeviceData extends Model
+class DeviceData extends Base
 {
     //
     protected $table = 'device_data';

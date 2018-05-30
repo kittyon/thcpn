@@ -9,6 +9,9 @@ const state = {
         get RefreshToken(){
             return localStorage.getItem("refresh_token");
         }
+        get Phone(){
+          return localStorage.getItem("phone");
+        }
     }
 };
 

@@ -1,3 +1,5 @@
+import registerRouters from './register-routers'
+
 const routers = [
   {
     path:'/login',
@@ -5,15 +7,24 @@ const routers = [
     meta:{
       requireAuth: false,
     },
-    component:require('../components/login.vue')
+    component:require('../components/auth/login.vue')
   },
   {
+    path:'/register',
+    name:'register',
+    meta:{
+      requireAuth:false,
+    },
+    component:require('../components/auth/register.vue'),
+    children:registerRouters
+  }
+  {
     path:'/',
-    name:'exp',
+    name:'main',
     meta:{
       requireAuth: true,
     },
-    component:require('../components/ExampleComponent.vue')
+    component:require('../components/layout.vue')
   }
 
 ]
