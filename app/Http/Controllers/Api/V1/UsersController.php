@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Http\Requests\Api\UserRequest;
 use App\Transformers\UserTransformer;
 use Illuminate\Support\Facades\Auth;
+use App\Traits\PassportToken;
 
 class UsersController extends Controller
 {
@@ -40,7 +41,7 @@ class UsersController extends Controller
 
         $result = $this->getBearerTokenByUser($user, '1', false);
         return $this->response->array($result)->setStatusCode(201);
-        
+
     }
     public function me()
     {

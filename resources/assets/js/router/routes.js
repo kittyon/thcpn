@@ -1,30 +1,33 @@
-import registerRouters from './register-routers'
+import mainRouters from './main-routers'
 
 const routers = [
   {
     path:'/login',
     name: 'login',
     meta:{
+      title: "登录",
       requireAuth: false,
     },
-    component:require('../components/auth/login.vue')
+    component:require('../views/auth/login.vue')
   },
   {
     path:'/register',
     name:'register',
     meta:{
+      title: "注册",
       requireAuth:false,
     },
-    component:require('../components/auth/register.vue'),
-    children:registerRouters
-  }
+    component:require('../views/auth/register.vue'),
+  },
   {
     path:'/',
     name:'main',
     meta:{
+      title: "首页",
       requireAuth: true,
     },
-    component:require('../components/layout.vue')
+    component:require('../views/layout/layout.vue'),
+    children: mainRouters
   }
 
 ]

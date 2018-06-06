@@ -5,9 +5,9 @@ namespace App\Http\Controllers\Api\V1;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Organization;
-use use App\Transformers\OrganizationTransformer;
+use App\Transformers\OrganizationTransformer;
 
-class OrganizationController extends Controller
+class OrganizationsController extends Controller
 {
     //
     public function index(Request $request){

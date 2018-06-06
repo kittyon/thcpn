@@ -51,16 +51,12 @@ class User extends Authenticatable implements JWTSubject
         return self::where($credentials)->first();
     }
 
-    public function roles(){
-        return $this->belongsToMany('App\Models\Urole');
-    }
-
     public function devices(){
-      return $this->belongsToMany('App\Models\Device');
+      return $this->belongsToMany('App\Models\Device')->withPivot(['urole_ids']);
     }
 
     public function organizations(){
-      return $this->belongsToMany('App\Models\Organization');
+      return $this->belongsToMany('App\Models\Organization')->withPivot(['urole_ids']);
     }
 
     public function has($model, $id) {
@@ -72,12 +68,12 @@ class User extends Authenticatable implements JWTSubject
         return false;
     }
 
-    public function allows($permission, $requireAll = false)
+    public function allows($permission,$roles,$requireAll = false)
     {
         //Log::info($permission);
         if (is_array($permission)) {
             foreach ($permission as $permName) {
-                $hasPerm = $this->allows($permName, false);
+                $hasPerm = $this->allows($permName, $roles, false);
 
                 if ($hasPerm && !$requireAll) {
                     return true;
@@ -91,10 +87,10 @@ class User extends Authenticatable implements JWTSubject
             // Return the value of $requireAll;
             return $requireAll;
         } else {
-            foreach ($this->roles as $role) {
+            foreach ($roles as $role) {
                 // Validate against the Permission table
                 //if ($role->app_id != $app_id) continue;
-                foreach ($role->perms as $perm) {
+                foreach ($role->permissions()->get() as $perm) {
                     if ($perm->name == $permission) {
                         return true;
                     }

@@ -28,6 +28,7 @@ $api->version('v1', function($api) {
 
 $api->version('v1', [
     'namespace' => 'App\Http\Controllers\Api\V1',
+    'middleware' => 'serializer:array'
 ], function($api) {
   $api->group([
           'middleware' => 'api.throttle',
@@ -43,7 +44,9 @@ $api->version('v1', [
                   ->name('api.user.show');
               // 获取devices信息
               $api->get('devices','DevicesController@index')->name('api.devices.index');
-              $api->get('device/{device_id}','DevicesController@show')->name('api.devices.show');
+              $api->get('device/{device_id}','DevicesController@show')->name('api.device.show');
+              $api->put('device/{device_id}', 'DevicesController@update')->name('api.device.update');
+              $api->post('device/{device_id}/dettach', 'DevicesController@detach')->name('api.device.detach');
               // 获取organization信息
               $api->get('organizations','OrganizationsController@index')->name('api.organizations.index');
               // 获取permission信息

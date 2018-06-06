@@ -5,12 +5,18 @@ namespace App\Http\Controllers\Api\V1;
 use Illuminate\Http\Request;
 use Gregwar\Captcha\CaptchaBuilder;
 use App\Http\Requests\Api\CaptchaRequest;
+use App\Models\User;
+use Illuminate\Support\Facades\Log;
 
 class CaptchasController extends Controller
 {
     //
     public function store(CaptchaRequest $request, CaptchaBuilder $captchaBuilder)
     {
+        if(User::where('phone',$request->phone)->first()){
+          return $this->response->errorInternal("用户已存在");
+        }
+
         $key = 'captcha-'.str_random(15);
         $phone = $request->phone;
 

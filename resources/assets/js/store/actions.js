@@ -3,11 +3,20 @@ import config from '../config/index';
 
 //actions常用于异步更改状态。也就是说它一般用来先发送请求，然后再commit
 export default {
-    UserLogin({commit}, data){
+    userLogin({commit}, data){
         commit(types.LOGIN, data);
     },
-    UserLogout({commit}){
+    userLogout({commit}){
         commit(types.LOGOUT);
+    },
+    getCurrentUser({commit}){
+      axios.get('user').then(res=>{
+        commit(types.USER, JSON.stringify(res.data));
+        
+      });
+    },
+    deleteToken({commit}){
+      commit(types.DELTOKEN);
     },
     createToken({commit}, model){
       let params = {
@@ -17,10 +26,10 @@ export default {
           username: model.username,
           password: model.password,
       };
-      axios.post('authorizations', params).then(function(response){
-        commit(types.LOGIN,response.data);
-        console.log(response);
-        return response.data.access_token;
-      })
+      return axios.post('authorizations', params).then(res => {
+        commit("login",res.data);
+        console.log(res)
+        return res.data;
+      });
     }
 }

@@ -7,6 +7,7 @@ use App\Models\DeviceConfig;
 use App\Models\Device;
 use App\Transformers\DeviceConfigTransformer;
 use App\Http\Requests\Api\DataConfigRequest;
+use App\Models\Urole;
 
 class DeviceConfigController extends Controller
 {
@@ -37,10 +38,19 @@ class DeviceConfigController extends Controller
       }
     }
     public function store($device_id, DataConfigRequest $request){
-      if($this->_hasDevice($device_id)){
+      $org_id = $request->input('org_id',null);
+      if($this->_hasDevice($device_id, $org_id)){
         $body = $request->all();
         $body['device_id'] = $device_id;
-        return $this->response->item($this->_store($body), new DeviceConfigTransformer());
+
+        $roles = array();
+        if($org_id){
+          $roles = $this->_roles('organizations',$org_id);
+        }
+        else{
+          $roles = $this->_roles('devices', $device_id);
+        }
+        return $this->response->item($this->_store($body, $roles), new DeviceConfigTransformer());
       }
       else{
         return $this->response->errorUnauthorized('您无权创建该配置信息');

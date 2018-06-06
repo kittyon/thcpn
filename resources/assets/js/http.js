@@ -71,7 +71,7 @@ axios.interceptors.response.use(
                     *需要区别于普通接口调用*/
                     store.commit('deltoken');
                     //判断是否已经刷新过token
-                    if (!config.isRetryRequest) {
+                    if (!config.isRetryRequest && store.state.currentUser.RefreshToken) {
                         return getRefreshToken()
                             .then(function (res) {
                                 let data = res.data;
@@ -112,6 +112,7 @@ axios.interceptors.response.use(
             })
         }
         loadinginstace.close();
-        return Promise.reject(err)
+        //throw err;
+        return Promise.reject(err);
     }
 );

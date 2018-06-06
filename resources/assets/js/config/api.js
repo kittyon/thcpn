@@ -3,7 +3,7 @@ import server from './server'
 
 let client = {
 	id: '1',
-	secret: 'oExRJMIyJzI0NBIVKtcSloOcDabPUoMLii8f5PeJ'
+	secret: 'Hop9DTMtRLvuh1EfRTHxzJNIkH0zyWi9PvVQi2M6'
 }
 
 export default {

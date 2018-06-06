@@ -12,9 +12,13 @@ class UserTableSeeder extends Seeder
     public function run()
     {
         //
+        $role = Urole::where(['name','=','deviceManager'])->first();
+        $roles = array($role->id);
+        $role_m = Urole::where(['name','=','manager']);
+        $roles_m = array($role_m->id);
         factory(App\Models\User::class, 2)->create()->each(function($u){
-          $u->devices()->save(factory(App\Models\Device::class)->make());
-          $u->organizations()->save(factory(App\Models\Organization::class)->make());
+          $u->devices()->save(factory(App\Models\Device::class)->make(),['role_ids'=>json_encode($roles)]);
+          $u->organizations()->save(factory(App\Models\Organization::class)->make(),['role_ids'=>json_encode($roles_m)]);
         });
 
         factory(App\Models\Organization::class,2)->create()->each(function($o){
