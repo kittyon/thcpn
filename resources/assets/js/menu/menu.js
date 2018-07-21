@@ -32,5 +32,30 @@ devs.list = {
   path: '/devices/list',
 };
 
+menu.organization = {
+  name: '组织管理',
+  icon: 'fa fa-sitemap',
+  children: {}
+};
+
+let orgs = menu.organization.children;
+
+orgs.list = {
+  name: '组织列表',
+  path: '/orgs/list'
+};
+
+menu.data={
+  name: '数据管理',
+  icon: 'fa fa-sitemap',
+  children: {}
+}
+
+let dataManager = menu.data.children;
+
+dataManager.download = {
+  name: '数据下载',
+  path: '/download'
+}
 
 export default menu;

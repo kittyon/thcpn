@@ -1,6 +1,7 @@
 <template>
   <div class="sub-navbar draft">
     <div v-if="orgs.length > 1">
+      <span>用户或组织</span>
       <el-select v-model="current_org">
         <el-option v-for="org in orgs" :value="org.id" :key="org.id" :label="org.name"></el-option>
       </el-select>
@@ -26,7 +27,6 @@
     },
     watch: {
       current_org: function (newOrg, oldOrg) {
-        console.log("org changed");
         this.$cookie.set('current_org',newOrg);
         this.$emit('orgChanged',newOrg);
         // location.href = '/eason';

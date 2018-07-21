@@ -22,7 +22,7 @@ class DeviceConfigController extends Controller
       $org_id = $request->input('org_id');
 
       if($this->_hasDevice($device_id, $org_id)){
-        return $this->response->collection(Device::find($device_id)->config()->get(), new DeviceConfigTransformer());
+        return $this->response->item(Device::find($device_id)->config()->first(), new DeviceConfigTransformer());
       }
       else{
         return $this->response->errorUnauthorized('您无权获取最新信息');
@@ -42,7 +42,8 @@ class DeviceConfigController extends Controller
       if($this->_hasDevice($device_id, $org_id)){
         $body = $request->all();
         $body['device_id'] = $device_id;
-
+        $body['data'] = json_decode($body['data']);
+        $body['control'] = json_decode($body['control']);
         $roles = array();
         if($org_id){
           $roles = $this->_roles('organizations',$org_id);

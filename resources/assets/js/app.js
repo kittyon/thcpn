@@ -8,7 +8,8 @@
 require('./bootstrap');
 
 window.Vue = require('vue');
-
+import VueHighcharts from 'vue-highcharts';
+import highcharts from 'highcharts';
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -23,6 +24,8 @@ import App from './App.vue';
 import ElementUI from 'element-ui';
 import i18n from './lang' // Internationalization
 import BaiduMap from 'vue-baidu-map';
+import './icons' // icon
+import VueImg from 'v-img';
 
 import 'element-ui/lib/theme-chalk/index.css';
 import './styles/index.scss'; // global css
@@ -30,11 +33,17 @@ import './assets/css/font-awesome.min.css';
 import './assets/css/style.css';
 
 var VueCookie = require('vue-cookie');
-
+highcharts.setOptions({
+  global: {
+    useUTC: false
+  }
+});
 Vue.prototype.$Config = Config;
 Vue.use(Vuex);
 Vue.use(VueCookie);
+Vue.use(VueImg);
 Vue.use(VueRouter);
+Vue.use(VueHighcharts);
 Vue.use(ElementUI, {
   size: 'medium', // set element-ui default size
   i18n: (key, value) => i18n.t(key, value)

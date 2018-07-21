@@ -22,7 +22,10 @@ class DevicesController extends Controller
     public function index(Request $request){
       $org_id = $request->input('org_id');
       $per_page = $request->input('limit',null);
-      if($org_id && $this->user()->has('organizations', $org_id)){
+
+      if($org_id){
+        $roles = $this->_roles('organizations',$org_id);
+        $this->assertPermissions('index', $roles);
         if(!is_null($per_page)){
           return $this->response->paginator(Organization::find($org_id)->devices()->paginate($per_page),
           new DevicesTransformer($this->_permissions('organizations', $org_id)));
@@ -83,7 +86,7 @@ class DevicesController extends Controller
       }
 
     }
-
+    public function attach()
     public function detach($device_id, Request $request){
       $org_id = $request->input('org_id', null);
 

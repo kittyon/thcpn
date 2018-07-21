@@ -42,13 +42,22 @@ $api->version('v1', [
               // 当前登录用户信息
               $api->get('user', 'UsersController@me')
                   ->name('api.user.show');
+
+              $api->get('user/search', 'UsersController@search')->name('api.user.search');
+              $api->post('user/invite', 'UsersController@Invite')->name('api.user.invite');
               // 获取devices信息
               $api->get('devices','DevicesController@index')->name('api.devices.index');
               $api->get('device/{device_id}','DevicesController@show')->name('api.device.show');
               $api->put('device/{device_id}', 'DevicesController@update')->name('api.device.update');
-              $api->post('device/{device_id}/dettach', 'DevicesController@detach')->name('api.device.detach');
+              $api->post('device/{device_id}/detach', 'DevicesController@detach')->name('api.device.detach');
               // 获取organization信息
               $api->get('organizations','OrganizationsController@index')->name('api.organizations.index');
+              $api->post('organization','OrganizationsController@store')->name('api.organization.store');
+              $api->get('organization/{org_id}','OrganizationsController@show')->name('api.organizations.show');
+              $api->put('organization/{org_id}', 'OrganizationsController@update')->name('api.organizations.update');
+              $api->get('organization/{org_id}/users', 'OrganizationsController@users')->name('api.organization.users');
+              $api->post('organization/{org_id}/detach','OrganizationsController@detach')->name('api.organization.detach');
+              $api->get('organization/{org_id}/children','OrganizationsController@children')->name('api.organization.children');
               // 获取permission信息
               $api->get('permissions','PermissionsController@index')->name('api.permissions.index');
               // 获取device最新的config
@@ -59,6 +68,13 @@ $api->version('v1', [
               // 获取device的data数据
               $api->get('device/{device_id}/datas','DeviceDataController@index')->name('api.deviceData.index');
 
+              // 获取invitation信息
+              $api->get('invitations/owner','InvitationController@indexOfOwner')->name('api.invitations.index.owner');
+              $api->get('invitations/user','InvitationController@indexOfUser')->name('api.invitations.index.user');
+              $api->post('invitation','InvitationController@store')->name('api.inivataion.store');
+              $api->post('invitation/{inv_id}/pass','InvitationController@pass')->name('api.invitation.pass');
+              $api->post('invitation/{inv_id}/unpass','InvitationController@unpass')->name('api.invitation.unpass');
+              $api->delete('invitation/{inv_id}','InvitationController@Delete')->name('api.invitation.delete');
           });
       });
 

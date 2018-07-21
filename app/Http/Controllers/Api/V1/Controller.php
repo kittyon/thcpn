@@ -1,8 +1,8 @@
 <?php
 
 namespace App\Http\Controllers\Api\V1;
-
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Request;
 use Dingo\Api\Routing\Helpers;
 use App\Http\Controllers\Controller as BaseController;
 use App\Models\Organization;
@@ -22,9 +22,9 @@ class Controller extends BaseController
         return false;
       }
     }
-    public function _index($where = null, $callback = null)
+    public function _index($roles, $where = null, $callback = null)
     {
-      $this->assertPermissions('index');
+      $this->assertPermissions('index', $roles);
       if ($where === null) {
           $where = [DB::raw('1'), 1];
       }
@@ -39,9 +39,10 @@ class Controller extends BaseController
       if ($callback) {
           $callback($items);
       }
-      return $items;
+      return $items->get();
     }
     public function _store($data, $roles) {
+
         $this->assertPermissions('store', $roles);
         return call_user_func([static::$model, 'create'], $data);
     }
@@ -55,9 +56,22 @@ class Controller extends BaseController
     }
 
     protected function _roles($type, $id){
-
       $items = call_user_func(array($this->user(),$type));
-      $role_ids = json_decode($items->where('id',$id)->first()->pivot->urole_ids);
+
+      $role_ids = array();
+      if($items->where('id',$id)->first()){
+        $role_ids = json_decode($items->where('id',$id)->first()->pivot->urole_ids);
+      }
+      else{
+        $items = call_user_func(array($this->user(),$type));
+        foreach($items->get() as $item){
+          if($item->hasSub($id))
+          {
+            $role_ids = json_decode($item->pivot->urole_ids);
+          }
+        }
+      }
+
       $roles = array();
       foreach($role_ids as $role_id){
         array_push($roles, Urole::find($role_id));
@@ -75,9 +89,11 @@ class Controller extends BaseController
       return $perms->unique();
     }
     public function assertPermissions($action, $roles) {
+
         if (!empty(static::$permissions)) {
             $permissions = isset(static::$permissions[$action]) ? static::$permissions[$action]: @static::$permissions['all'];
             if (!$permissions) return;
+
             $this->user()->allows($permissions, $roles,false) || $this->response->errorUnauthorized("权限不足");
         }
     }

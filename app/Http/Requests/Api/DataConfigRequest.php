@@ -27,6 +27,7 @@ class DataConfigRequest extends FormRequest
         return [
             'data' => 'required|json',
             'control' => 'required|json',
+            'version' =>'required'
         ];
     }
 }

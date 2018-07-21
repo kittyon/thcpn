@@ -1,26 +1,26 @@
 export default[
   {
-    path: '/:id',
+    path: '',
     name: 'device-dashboard',
     meta: { title:"设备信息",requireAuth: true },
     component: require('../views/main/device/index.vue')
   },
   {
-    path: '/:id/config',
+    path: 'config',
     name: 'device-config',
     meta:{ title:"设备配置",requireAuth: true},
     component: require('../views/main/device/config.vue')
   },
   {
-    path: '/:id/datas',
+    path: 'datas',
     name: 'device-datas',
     meta:{ title:"设备数据",requireAuth: true},
     component: require('../views/main/device/datas.vue')
   },
   {
-    path: '/:id/gallery',
-    name: 'main-device',
-    meta: { title:"设备信息",requireAuth: true },
-    component: require('../views/main/device.vue')
+    path: 'gallery',
+    name: 'device-gallery',
+    meta: { title:"设备图像",requireAuth: true },
+    component: require('../views/main/device/gallery.vue')
   }
 ]

@@ -4,7 +4,11 @@ namespace App\Http\Controllers\Api\V1;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+
 use App\Http\Requests\Api\UserRequest;
+use App\Http\Requests\Api\UserSearchRequest;
+use App\Http\Requests\Api\UserInviteRequest;
+
 use App\Transformers\UserTransformer;
 use Illuminate\Support\Facades\Auth;
 use App\Traits\PassportToken;
@@ -46,5 +50,16 @@ class UsersController extends Controller
     public function me()
     {
         return $this->response->item($this->user(), new UserTransformer());
+    }
+    public function orgInvite(UserInviteRequest $request){
+        $owner_id = $this->user()->id;
+        
+    }
+
+    public function search(UserSearchRequest $request){
+      $colName = $request->colName;
+      $searchContent = $request->content;
+
+      $this->response->collection(\App\Models\User::hydrate(Searchy::search('users')->fields($colName)->query($searchContent)->limit(10)->get()), new UserTransformer());
     }
 }

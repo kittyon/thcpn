@@ -13,6 +13,7 @@ class DeviceConfigTransformer extends TransformerAbstract
             'id' => $config->id,
             'data' => $config->data,
             'control' => $config->control,
+            'version' => $config->version
         ];
     }
 }

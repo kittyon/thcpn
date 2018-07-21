@@ -6,8 +6,8 @@ namespace App\Models;
 class Organization extends Base
 {
     //
-
-    protected $table = 'organizations';
+    const TABLE = 'organizations';
+    protected $table = self::TABLE;
 
     protected $fillable = ['name', 'description', 'organization_id'];
 
@@ -15,18 +15,41 @@ class Organization extends Base
       return $this->belongsToMany('App\Models\Device');
     }
 
-    public function parentOrganization(){
+    public function parent(){
       return $this->belongsTo($this,'organization_id', 'id');
     }
 
-    public function childrenOrganization(){
-      return $this->hasMany($this, 'id', 'organization_id');
+    public function children(){
+      return $this->hasMany($this, 'organization_id','id');
+    }
+
+    public function users(){
+      return $this->belongsToMany('App\Models\User');
     }
 
     public function roles(){
         return $this->belongsToMany('App\Models\ORole');
     }
 
+    public function invitations()
+    {
+        return $this->morphMany('App\Models\Invitation', 'invitationable');
+    }
+
+    public function hasSub($id){
+      $res = false;
+      foreach ($this->children()->get() as $sub) {
+        // code...
+        if($sub->id == $id){
+          return true;
+        }
+        $res |= $sub->hasSub($id);
+        if($res){
+          return $res;
+        }
+      }
+      return $res;
+    }
     public function allows($permission, $requireAll = false)
     {
         //Log::info($permission);

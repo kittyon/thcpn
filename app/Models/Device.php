@@ -6,8 +6,8 @@ namespace App\Models;
 class Device extends Base
 {
     //
-
-    protected $table = 'devices';
+    const TABLE = 'devices';
+    protected $table = self::TABLE;
 
     protected $fillable = ['name', 'version', 'iccid'];
 
@@ -17,5 +17,10 @@ class Device extends Base
 
     public function config() {
         return $this->configs()->orderBy('updated_at', 'desc')->limit(1);
+    }
+
+    public function invitations()
+    {
+        return $this->morphMany('App\Models\Invitation', 'invitationable');
     }
 }

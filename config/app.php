@@ -179,6 +179,9 @@ return [
 
         App\Providers\EasySmsServiceProvider::class,
         Frozennode\Administrator\AdministratorServiceProvider::class,
+        Laravel\Scout\ScoutServiceProvider::class,
+        TomLingham\Searchy\SearchyServiceProvider::class,
+        Yangyifan\Upload\UploadServiceProvider::class
 
 
 
@@ -230,6 +233,7 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
+        'Searchy' => TomLingham\Searchy\Facades\Searchy::class
 
 
     ],

@@ -8,6 +8,12 @@ const state = {
         },
         get RefreshToken(){
             return localStorage.getItem("refresh_token");
+        },
+        get Device(){
+          return JSON.parse(localStorage.getItem("device")||"{}");
+        },
+        get Org(){
+          return localStorage.getItem("org");
         }
     },
     user: {

@@ -6,11 +6,15 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravel\Passport\HasApiTokens;
+use Laravel\Scout\Searchable;
+use NotificationChannels\WebPush\HasPushSubscriptions;
 
 class User extends Authenticatable implements JWTSubject
 {
     use Notifiable;
     use HasApiTokens;
+    use Searchable;
+    use HasPushSubscriptions;
 
     /**
      * The attributes that are mass assignable.
@@ -42,6 +46,11 @@ class User extends Authenticatable implements JWTSubject
         return [];
     }
 
+    public function download_jobs()
+    {
+        return $this->hasMany('App\Models\DownloadJob');
+    }
+
     public function findForPassport($username)
     {
         filter_var($username, FILTER_VALIDATE_EMAIL) ?
@@ -59,7 +68,21 @@ class User extends Authenticatable implements JWTSubject
       return $this->belongsToMany('App\Models\Organization')->withPivot(['urole_ids']);
     }
 
-    public function has($model, $id) {
+    public function has($model, $id, $isCascading=false) {
+        $res = false;
+        if($isCascading){
+          foreach ($this->$model as $instance) {
+              if ($instance->id == $id) {
+                  return true;
+              }
+              $res|=$instance->hasSub($id);
+              if($res){
+                return $res;
+              }
+          }
+          return $res;
+        }
+
         foreach ($this->$model as $instance) {
             if ($instance->id == $id) {
                 return true;

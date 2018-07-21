@@ -97,7 +97,7 @@ axios.interceptors.response.use(
                             //刷新token失败只能跳转到登录页重新登录
                                 store.commit('logout');
                                 router.replace({
-                                    path: 'login',
+                                    path: '/login',
                                     query: {redirect: router.currentRoute.fullPath}
                                 });
                                 throw err;

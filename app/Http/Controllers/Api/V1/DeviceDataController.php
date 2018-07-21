@@ -13,24 +13,44 @@ class DeviceDataController extends Controller
       'index' =>['dev_r']
     ];
     //
-    public function index(Request $request){
+    public function index($device_id, Request $request){
 
-      $device_id = $request->input('device_id');
+      //$device_id = $request->input('device_id');
       $org_id = $request->input('org_id');
-
+      if(!is_null($org_id)){
+        $roles = $this->_roles('organizations',$org_id);
+      }
+      else{
+        $roles = $this->_roles('devices',$device_id);
+      }
       if($this->_hasDevice($device_id, $org_id)){
-        $datas = $this->_index(['device_id','=',$device_id],function (&$items) use ($request) {
+        $datas = $this->_index($roles, ['device_id','=',$device_id],function(&$items)use($request){
             $items->orderBy('ts', 'asc');
             if ($request->input('start_at')) {
                 $items->where('ts', '>=', $request->input('start_at'));
             }
             if ($request->input('end_at')) {
                 $items->where('ts', '<=', $request->input('end_at'));
-            });
+            }});
         return $this->response->collection($datas, new DeviceDataTransformer());
       }
       else{
-        return $this->response->errorUnauthorized('您无权获取相关数据信息');
+        return $this->response->errorUnauthorized('您无权获取相关数据信息!');
       }
     }
+    public function first(Request $request){
+      $device_id = $request->input('device_id');
+      $org_id = $request->input('org_id', null);
+
+      if(!$this->_hasDevice($device_id, $org_id)){
+        return $this->response->errorUnauthorized('您无权获取相关数据信息');
+      }
+
+      $data = $this->_index(['device_id','=',$device_id],function (&$items) use ($request) {
+          $items->orderBy('ts', 'asc');
+        })->first();
+      return $this->response->item($data, new DeviceDataTransformer());
+
+    }
+
 }

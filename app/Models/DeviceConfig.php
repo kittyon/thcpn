@@ -6,7 +6,7 @@ namespace App\Models;
 class DeviceConfig extends Base
 {
     //
-    protected $fillable = ['data', 'control', 'device_id'];
+    protected $fillable = ['data', 'control', 'device_id','version'];
 
     protected $table = 'device_config';
 

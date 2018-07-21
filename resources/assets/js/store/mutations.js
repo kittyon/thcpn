@@ -18,6 +18,12 @@ const mutations = {
     },
     [types.USER]: (state, data)=>{
       localStorage.setItem('user', data);
+    },
+    [types.DEVICE]:(state, data)=>{
+      localStorage.setItem('device', JSON.stringify(data));
+    },
+    [types.ORG]:(state, data)=>{
+      localStorage.setItem('org', data);
     }
 };
 
