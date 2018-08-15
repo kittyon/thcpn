@@ -11,19 +11,26 @@ export default[
     path: 'notification',
     name: 'main-notification',
     meta:{title:"通知中心", requireAuth: true},
-    component: require('../views/main/notification.vue')
+    component: require('../views/main/notifications.vue')
   },
   {
-    path: 'download',
-    name: 'main-download',
+    path: 'data/download',
+    name: 'data-download',
     meta:{title:"数据下载", requireAuth: true},
-    component: require('../views/main/download.vue')
+    component: require('../views/main/data/download.vue')
+  },
+  {
+    path: 'data/detail',
+    name: 'data-detail',
+    meta:{title:"数据详情", requireAuth: true},
+    component: require('../views/main/data/detail.vue')
   },
   {
     path: '',
-    name: 'main-dashboard',
-    meta: { title:"设备信息",requireAuth: true },
-    component: require('../views/main/dashboard.vue')
+    redirect: 'devices/map'
+    //name: 'main-dashboard',
+    //meta: { title:"设备信息",requireAuth: true },
+    //component: require('../views/main/dashboard.vue')
   },
   {
     path: 'devices/map',

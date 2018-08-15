@@ -19,6 +19,9 @@ const state = {
     user: {
       get Current(){
         return JSON.parse(localStorage.getItem("user")||"{}");
+      },
+      set Current(c){
+        localStorage.setItem('user', c);
       }
     },
     /**

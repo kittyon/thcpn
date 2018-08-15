@@ -20,6 +20,14 @@ class InvitationController extends Controller
 
       $request['owner_id'] = $this->user()->id;
 
+      //notify
+      $user = User::find($request->user_id);
+      $title = $request->invitationable_type." invitation";
+      $item = call_user_func(array($this->user(),$request->invitationable_type))->where('id','=',$request->invitationable_id)->first();
+      $body = "invitation from ".$this->user()->name." about ".$item->name;
+      $action_url = env('APP_URL')."/#/profile";
+      $user->notify(new InfoNotification($title, $body, $action_url));
+
       return $this->response->item($this->_store($request, $roles), new InvitationTransformer());
     }
     public function indexOfOwner(Request $request){
@@ -27,7 +35,7 @@ class InvitationController extends Controller
       $per_page = $request->input('limit',null);
       $invitationable_type = $request->input('invitationable_type', "");
       if(!is_null($per_page)){
-        $invs = \App\Models\Invitation::where('owner_id',$id)->where('invitationable_type',$invitationable_type)->paginate($per_page)
+        $invs = \App\Models\Invitation::where('owner_id',$id)->where('invitationable_type',$invitationable_type)->paginate($per_page);
         return $this->response->paginator($invs, new InvitationTransformer());
       }
       else{
@@ -41,7 +49,7 @@ class InvitationController extends Controller
       $per_page = $request->input('limit',null);
       $invitationable_type = $request->input('invitationable_type', "");
       if(!is_null($per_page)){
-        $invs = \App\Models\Invitation::where('user_id',$id)->where('invitationable_type',$invitationable_type)->paginate($per_page)
+        $invs = \App\Models\Invitation::where('user_id',$id)->where('invitationable_type',$invitationable_type)->paginate($per_page);
         return $this->response->paginator($invs, new InvitationTransformer());
       }
       else{
@@ -56,6 +64,9 @@ class InvitationController extends Controller
         $Inv->status = 'pass';
         $Inv->save();
         call_user_func($this->user(), $Inv->invitationable_type)->attach($Inv->invitationable_id,['urole_ids'=>[$Inv->role_id]]);
+
+
+
         return $this->response->item($Inv, new InvitationTransformer());
       }
     }

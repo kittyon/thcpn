@@ -31,8 +31,8 @@ export default{
       let param_t = {name: this.org.name, description: this.org.description}
       axios.put("organization/"+this.org.id, param_t).then(res=>{
         self.$notify({
-          title: '成功',
-          message: '更新成功',
+          title: $t('success.title'),
+          message: $t('success.refresh'),
           type: 'success',
           duration: 2000
         })

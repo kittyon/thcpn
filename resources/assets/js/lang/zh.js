@@ -1,4 +1,24 @@
 export default {
+  auth:{
+    login: '登录',
+    register: '注册',
+    backTo: '返回',
+    passwordPlaceholder: '请输入密码',
+    namePlaceholder: '请输入名称/电话',
+    loading: '载入中',
+    name: '用户名',
+    password: '密码',
+    step: '步骤',
+    phonePlaceholder:'请输入手机号',
+    captchaCode:'请输入验证码',
+    captchaTitle:'点击图片重新获取验证码',
+    captchaGot:'获取验证码',
+    usernamePlaceholder:'请输入用户名',
+    emailPlaceholder:'请输入email',
+    back:'上一步',
+    next:'下一步',
+
+  },
   route: {
     dashboard: '首页',
     introduction: '简述',
@@ -130,7 +150,8 @@ export default {
     detail: '详 情',
     addsub: '添加子组织',
     description: '描述',
-    create: '创建'
+    create: '创建',
+    loading:'加载中'
   },
   device:{
     config: '配置',
@@ -140,7 +161,8 @@ export default {
     weather:'天气',
     record: '记录',
     attach:'设备添加',
-    attachDescription: '请填写需要添加的设备SN号'
+    attachDescription: '请填写需要添加的设备SN号',
+    detachTitle:'确定解除绑定设备？',
   },
   config:{
     edit: '编辑',
@@ -155,7 +177,9 @@ export default {
     version: '版本',
     name:'名称',
     key:'索引(唯一)',
-    desc:'描述'
+    desc:'描述',
+    titleImageCtrl:'图片上传',
+    titleDataCtrl:'数据上传',
   },
   profile:{
     invitation:'邀请信息',
@@ -196,7 +220,14 @@ export default {
     name:'名称',
     description:'描述',
     update:'更新',
-    inviteUser:'邀请成员'
+    inviteUser:'邀请成员',
+    inviteTitle:'输入邀请用户',
+    inviteType:'请选择',
+    inviteTypeName:'用户名',
+    inviteTypeEmail:'email',
+    inviteTypePhone:'电话',
+    input:'请输入...',
+    removePeopleTitle:'从当前组织移除该用户？',
   },
   errorLog: {
     tips: '请点击右上角bug小图标',
@@ -222,7 +253,7 @@ export default {
     closeOthers: '关闭其它',
     closeAll: '关闭所有'
   },
-  download:{
+  data:{
     device:"设备",
     to: "至",
     date:"日期",
@@ -237,6 +268,46 @@ export default {
     del:"删除",
     status: '状态',
     created_at:'创建时间',
-    id:"序号"
+    id:"序号",
+    processing:"打包中",
+    completed:"打包完成",
+    devicePlaceholder:"选择要下载的设备",
+    content:"下载内容",
+    operation:"操作",
+    refresh:"更新",
+    detailContent:"数据类型",
+    detailExecute:"查询",
+    contentPlaceholder:"请选择数据类型"
+  },
+  notification:{
+    title: "标题",
+    body: "内容",
+    created: "发送时间",
+    status: "状态",
+    readed:"已读",
+    notReaded:"未读",
+  },
+  success:{
+    title:"成功",
+    config:"设备配置成功",
+    deviceRefresh:"设备更新成功",
+    removePeople:"移除成员成功",
+    invitePeople:'邀请成功，等待用户答复',
+    refresh:'更新成功',
+
+
+  },
+  error:{
+    date:"请输入日期范围",
+    dateRange:"间隔大于30天,请重新选择!",
+    device:"请选择设备",
+    content:"请选择下载内容",
+    auth:'用户名或密码错误！',
+    server:'服务器内部异常，请稍后再试!',
+    title:'发生错误',
+    default:'出现异常，请稍后再试！',
+    password:'请输入密码',
+    confirmPassword:'请再次输入密码',
+    diffrentPassword:'两次输入密码不一致',
   }
 }

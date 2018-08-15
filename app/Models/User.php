@@ -9,6 +9,7 @@ use Laravel\Passport\HasApiTokens;
 use Laravel\Scout\Searchable;
 use NotificationChannels\WebPush\HasPushSubscriptions;
 
+
 class User extends Authenticatable implements JWTSubject
 {
     use Notifiable;

@@ -2,7 +2,7 @@ export default [{
     "name": "SOILMTYXR1_H",
     "desc": "土壤传感器，采集的数据为湿度H",
     "unit": "%",
-    "type": "humility",
+    "type": "humidity",
     "max_v": 100,
     "min_v": 0,
     "type_desc": "湿度"
@@ -18,7 +18,7 @@ export default [{
     "name": "CWS1806A1AG_H",
     "desc": "环境传感器, 采集的数据为湿度H",
     "unit": "%",
-    "type": "humility",
+    "type": "humidity",
     "max_v": 100,
     "min_v": 0,
     "type_desc": "湿度"

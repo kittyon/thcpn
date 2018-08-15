@@ -10,7 +10,7 @@
           <span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span> 返回</button>-->
         <el-button @click="handleAttach">{{$t('device.attach')}}</el-button>
     </div>
-    <list :org="current_org"/>
+    <list ref="devList" :org="current_org"/>
 
     <el-dialog :title="$t('device.attach')" :visible.sync="dialogAttachVisible">
       <el-input v-model="deviceIccid" :tooltip="$t('device.attachDescription')">
@@ -28,7 +28,7 @@
 import List from './device/list.vue'
 import api from '../../api';
 import {Message} from 'element-ui';
-import {mapGetters} from "vuex";
+import {mapState} from "vuex";
 export default {
   name: 'device-list',
   components:{
@@ -45,9 +45,9 @@ export default {
     }
   },
   computed:{
-    ...mapGetters(
+    ...mapState(
       {
-        user:'user'
+        user: state=> state.user.Current
       })
   },
   created: function () {
@@ -70,23 +70,26 @@ export default {
   },
   methods:{
     handleAttach: function(){
-      dialogAttachVisible = true;
+      this.dialogAttachVisible = true;
     },
     attachDevice: function(){
       var param_t = {'iccid': this.deviceIccid};
       var self = this;
-      if(current_org == 0){
-        param_t['user_id'] = this.$store.getter.user.id;
+      if(this.current_org == 0){
+        param_t['attach_type'] = 'user';
+        param_t['user_id'] = this.user.id;
       }
       else{
+        param_t['attach_type'] = 'org';
         param_t['org_id'] = this.current_org;
       }
 
-      axios.post("/device/attach", param_t).then(res=>{
+      axios.post("/devices/attach", param_t).then(res=>{
+        self.$ref.devList.attachData();
         self.dialogAttachVisible = false;
         self.$notify({
           title: '成功',
-          message: '退出组织成功',
+          message: '添加设备成功',
           type: 'success',
           duration: 2000
         })

@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Transformers\DownloadJobTransformer;
 use Illuminate\Support\Facades\Storage;
 use App\Models\DownloadJob;
+use App\Jobs\ProcessDownload;
+
 
 
 class DownloadController extends Controller
@@ -23,7 +25,7 @@ class DownloadController extends Controller
         $per_page = $request->input('limit', null);
         // return compact('items');
         if(!is_null($per_page)){
-          return $this->response->collection($user->download_jobs()->paginate($per_page), new DownloadJobTransformer());
+          return $this->response->paginator($user->download_jobs()->paginate($per_page), new DownloadJobTransformer());
         }
         else{
           return $this->response->collection($user->download_jobs()->get(), new DownloadJobTransformer());

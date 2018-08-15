@@ -53,7 +53,7 @@ export default {
             position: {lng:v.lon, lat:v.lat},
             events: {
               click: () => {
-                self.$router.push('/device/'+v.id+'/dashboard');
+                self.$router.push('/device/'+v.id);
                 // self.$router.push('/station');
               },
             },

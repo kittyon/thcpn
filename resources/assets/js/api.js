@@ -81,14 +81,21 @@ export default{
     });
 
   },
-  data2Images(device, data, config){
+  data2Images(device, data, config, hasList = false){
     var self = this;
     var res = self.data2lists(device, data, config);
+    console.log(res);
     return _.filter(res, {type: 'image'});
   },
-  data2charts(device, data, config){
+  data2charts(device, data, config, hasList = false){
     var self = this;
-    var res = self.data2lists(device, data, config);
+    var res;
+    if(hasList){
+      res = data;
+    }
+    else{
+      res = self.data2lists(device, data, config);
+    }
     var charts = {};
     _.forIn(res, function(v,k){
       if(v.type == "image") return;

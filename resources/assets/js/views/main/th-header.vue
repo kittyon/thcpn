@@ -1,7 +1,7 @@
 <template>
   <div class="sub-navbar draft">
     <div v-if="orgs.length > 1">
-      <span>用户或组织</span>
+      <span style="margin-right:15px; color: #fff;">用户或组织</span>
       <el-select v-model="current_org">
         <el-option v-for="org in orgs" :value="org.id" :key="org.id" :label="org.name"></el-option>
       </el-select>
@@ -11,7 +11,7 @@
   </div>
 </template>
 <script>
-  import {mapGetters} from "vuex";
+  import {mapState} from "vuex";
   export default {
     data: function () {
       return {
@@ -20,9 +20,9 @@
       }
     },
     computed:{
-      ...mapGetters(
+      ...mapState(
         {
-          user:'user'
+          user: state=> state.user.Current
         })
     },
     watch: {

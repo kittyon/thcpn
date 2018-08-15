@@ -1,7 +1,7 @@
 <template>
   <div>
     <!--<th-header v-on:orgChanged="onOrgChanged" ></th-header>-->
-    <el-table :key='tableKey' :data="devices" v-loading="listLoading" element-loading-text="给我一点时间" border fit highlight-current-row
+    <el-table :key='tableKey' :data="devices" v-loading="listLoading" :element-loading-text="$t('table.loading')" border fit highlight-current-row
       style="width: 100%">
       <el-table-column align="center" :label="$t('table.id')" width="65">
         <template slot-scope="scope">
@@ -62,7 +62,7 @@
     </el-dialog>
 
     <el-dialog :title="$t('table.detach')" :visible.sync="dialogDetachVisible">
-      <span>确定解除绑定设备？</span>
+      <span>{{$t('device.detachTitle')}}</span>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogDetachVisible = false">{{$t('table.cancel')}}</el-button>
         <el-button type="primary" @click="detachData">{{$t('table.confirm')}}</el-button>
@@ -77,7 +77,7 @@
 import api from '../../../api';
 import {Message} from 'element-ui'
 export default {
-  name: 'device-list',
+  name: 'devList',
   props:['org'],
   data(){
     return {
@@ -113,6 +113,12 @@ export default {
       dialogFormVisible: false,
       dialogDetachVisible: false,
       devices:[]
+    }
+  },
+  watch:{
+    org: function(val, oldval){
+      this.current_org = val;
+      this.load(this.current_org, this.listQuery);
     }
   },
   created: function () {
@@ -182,6 +188,7 @@ export default {
       }
       axios.post('device/'+ tempData.id+'/detach', params).then(res=>{
         this.dialogDetachVisible = false;
+        _.remove(self.devices,
         this.$notify({
           title: '成功',
           message: '解除绑定成功',
@@ -192,8 +199,8 @@ export default {
         console.error(err);
       });
     },
-    createData(){
-
+    attachData(){
+      this.load(this.current_org, this.listQuery);
     },
     updateData(){
       var self = this;
@@ -211,8 +218,8 @@ export default {
             }
             self.dialogFormVisible = false
             self.$notify({
-              title: '成功',
-              message: '更新成功',
+              title: $t('success.title'),
+              message: $t('success.deviceRefresh'),
               type: 'success',
               duration: 2000
             })
@@ -245,13 +252,13 @@ export default {
         self.total = res.data.meta.pagination.total;
         }).catch(err=>{
         console.error(err)
-        self.error = { title: '发生错误', message: '出现异常，请稍后再试！' }
+        self.error = { title: $t('error.title'), message: $t('error.default') }
         switch (err.response && err.response.status) {
           case 401:
-            self.error.message = '用户名或密码错误！'
+            self.error.message = $t('error.auth')
             break
           case 500:
-            self.error.message = '服务器内部异常，请稍后再试！'
+            self.error.message = $t('error.service')
             break
         }
         Message.error(self.error);

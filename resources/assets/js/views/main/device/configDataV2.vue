@@ -8,7 +8,7 @@
         <el-button class="filter-item" v-if="editing" type="primary" @click="handleAdd">{{$t('config.add')}}</el-button>
       </div>
     </div>
-    <el-table :key='tableKey' :data="cData" v-loading="listLoading" element-loading-text="给我一点时间" border fit highlight-current-row
+    <el-table :key='tableKey' :data="cData" v-loading="listLoading" :element-loading-text="$t('table.loading')" border fit highlight-current-row
       style="width: 100%">
       <el-table-column type="expand">
         <template slot-scope="props">

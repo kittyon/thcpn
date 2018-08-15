@@ -17,7 +17,7 @@ const mutations = {
       localStorage.removeItem('access_token');
     },
     [types.USER]: (state, data)=>{
-      localStorage.setItem('user', data);
+      state.user.Current = data;
     },
     [types.DEVICE]:(state, data)=>{
       localStorage.setItem('device', JSON.stringify(data));

@@ -73,8 +73,8 @@ export default {
       control: {},
       cron: "",
       cronOption: {
-        img_collector_invl: "图片上传",
-        data_capture_invl: "数据上传"
+        img_collector_invl: $t("config.titleImageCtrl"),
+        data_capture_invl: $t('config.titleDataCtrl')
       },
       cronPopover: {},
       dialogCronVisible:false,
@@ -137,8 +137,8 @@ export default {
       axios.post(this.$route.path,tmpConfig).then(res=>{
         this.isChanged = false;
         this.$notify({
-          title: '成功',
-          message: '设备配置成功',
+          title: $t('success.title'),
+          message: $t('success.config'),
           type: 'success',
           duration: 2000
         })

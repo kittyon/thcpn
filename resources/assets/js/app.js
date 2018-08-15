@@ -26,11 +26,19 @@ import i18n from './lang' // Internationalization
 import BaiduMap from 'vue-baidu-map';
 import './icons' // icon
 import VueImg from 'v-img';
+import VueTimeago from 'vue-timeago'
+
 
 import 'element-ui/lib/theme-chalk/index.css';
 import './styles/index.scss'; // global css
 import './assets/css/font-awesome.min.css';
 import './assets/css/style.css';
+
+
+Vue.use(VueTimeago, {
+  locale: undefined,
+  locales: { 'zh-CN': require('date-fns/locale/zh_cn'), }
+})
 
 var VueCookie = require('vue-cookie');
 highcharts.setOptions({

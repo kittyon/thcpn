@@ -1,19 +1,19 @@
 <template>
   <div>
-    <div class="sub-navbar">
-        <span v-if="orgs.length > 1" class="sub-navbar-header" style="margin-right:15px; color: #fff;">{{$t('download.organization')}}</span>
+    <div class="sub-navbar draft">
+        <span v-if="orgs.length > 1" class="sub-navbar-header" style="margin-right:15px; color: #fff;">{{$t('data.organization')}}</span>
         <el-select v-if="orgs.length > 1" class="sub-navbar-header" v-model="current_org">
           <el-option v-for="org in orgs" :value="org.id" :key="org.id" :label="org.name"></el-option>
         </el-select>
+        <el-button type="primary" @click="refresh">{{$t('data.refresh')}}</el-button>
     </div>
-    <el-form :model="options" :rules="rules" ref="options" label-width="80px">
-      <el-form-item :label="$t('download.device')" prop="device">
+    <el-form :model="options" :rules="rules" ref="options" label-width="80px" style="margin-top:20px">
+      <el-form-item :label="$t('data.device')" prop="devices">
         <el-select
           v-model="options.devices"
           multiple
           collapse-tags
-          style="margin-left: 20px;"
-          placeholder="$t('download.devicePlaceholder')">
+          :placeholder="$t('data.devicePlaceholder')">
           <el-option
             v-for="item in devices"
             :key="item.id"
@@ -22,53 +22,64 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item :label="$t('download.date')" prop="date">
+      <el-form-item :label="$t('data.date')" prop="dates">
         <el-date-picker
           v-model="options.dates"
           type="datetimerange"
-          :range-separator="$t('download.to')"
-          :start-placeholder="$t('download.startDate')"
-          :end-placeholder="$t('download.endDate')">
+          :range-separator="$t('data.to')"
+          :start-placeholder="$t('data.startDate')"
+          :end-placeholder="$t('data.endDate')">
         </el-date-picker>
       </el-form-item>
-      <el-form-item :label="$t('download.content')" prop="contents">
+      <el-form-item :label="$t('data.content')" prop="contents">
         <el-checkbox-group v-model="options.contents" size="medium">
-          <el-checkbox-button v-for="dt in dataTypes" :label="dt" :key="dt">{{$t('download.'+dt)}}</el-checkbox-button>
+          <el-checkbox-button v-for="dt in dataTypes" :label="dt" :key="dt">{{$t('data.'+dt)}}</el-checkbox-button>
         </el-checkbox-group>
       </el-form-item>
       <el-form-item>
-        <el-button @click="handleDownloadRaw" type="success">{{$t('download.execute')}}</el-button>
+        <el-button @click="handleDownloadRaw" type="success">{{$t('data.execute')}}</el-button>
       </el-form-item>
     </el-form>
     <el-card>
-      <el-table :key='tableKey' :data="downloadJobs" v-loading="listLoading" element-loading-text="给我一点时间" border fit highlight-current-row>
-        <el-table-column align="center" :label="$t('download.id')" width="65">
+      <el-table :key='tableKey' :data="jobs" v-loading="listLoading" :element-loading-text="$t('table.loading')" border fit highlight-current-row style="width: 100%">
+        <el-table-column align="center" :label="$t('data.id')" width="65">
           <template slot-scope="scope">
             <span>{{scope.row.id}}</span>
           </template>
         </el-table-column>
-        <el-table-column align="center" :label="$t('download.created_at')" width="100">
+        <el-table-column align="center" :label="$t('data.created_at')" width="100">
           <template slot-scope="scope">
-            <span>{{scope.row.created_at}}</span>
+            <timeago :since="scope.row.created_at.date" :auto-update="30"></timeago>
+
           </template>
         </el-table-column>
-        <el-table-column align="center" :label="$t('download.date')" width="200">
+        <el-table-column align="center" :label="$t('data.device')" width="100">
+          <template slot-scope="scope">
+            <el-tag :key="dev.id" v-for="dev in scope.row.options.devices">{{dev.name}}</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column align="center" :label="$t('data.content')" width="100">
+          <template slot-scope="scope">
+            <el-tag :key="ct" v-for="ct in scope.row.options.contents">{{$t('data.'+ct)}}</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column align="center" :label="$t('data.date')" width="200">
           <template slot-scope="scope">
             <span>{{scope.row.options.dates[0]}}</span>
-            <span>{{$t('download.to')}}</span>
+            <span>{{$t('data.to')}}</span>
             <span>{{scope.row.options.dates[1]}}</span>
           </template>
         </el-table-column>
-        <el-table-column align="center" :label="$t('download.status')" width="200">
+        <el-table-column align="center" :label="$t('data.status')" width="200">
           <template slot-scope="scope">
-            <span>{{$t('download.'+scope.row.status)}}</span>
+            <span>{{$t('data.'+scope.row.status)}}</span>
           </template>
         </el-table-column>
 
-        <el-table-column align="center" :label="$t('download.operation')" width="200">
+        <el-table-column align="center" :label="$t('data.operation')" width="200">
           <template slot-scope="scope">
-            <el-button v-if="canDownload(scop.row.status)" @click="handleDownload(scop.row.url)">{{$t('download.execute')}}</el-button>
-            <el-button v-if="canDel(scop.row.status)" @click="handleDel(scope.row)">{{$t('download.del')}}</el-button>
+            <el-button v-if="canDownload(scope.row.status)" @click="handleDownload(scope.row.url)">{{$t('data.execute')}}</el-button>
+            <el-button v-if="canDel(scope.row.status)" @click="handleDel(scope.row)">{{$t('data.del')}}</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -81,16 +92,25 @@
   </div>
 </template>
 <script>
+import api from '../../../api';
+import {mapState} from "vuex";
 export default{
   created:function(){
     this.getOrg();
-    this.getDevice(org);
+    this.getDevice(this.current_org);
+    this.getJob(this.listQuery);
+  },
+  watch:{
+    current_org: function(val, oldval){
+      this.$cookie.set('current_org',val);
+      this.getDevice(val);
+    }
   },
   data(){
     const dataTypes = ['image', 'data'];
     var validateDevice = (rule, value, callback)=>{
       if(value.length == 0){
-        callback(new Error('请选择下载设备'));
+        callback(new Error($t('error.device')));
       }
       else{
         callback();
@@ -98,10 +118,10 @@ export default{
     };
     var validateDate = (rule, value, callback)=>{
       if(value.length < 2){
-        callback(new Error('请输入下载日期范围'));
+        callback(new Error($t('error.date')));
       }
-      else if(moment(query.dates[1]).diff(moment(query.dates[0]), "days")>30){
-        callback(new Error('下载间隔大于30天,请重新选择!'));
+      else if(moment(value[1]).diff(moment(value[0]), "days")>30){
+        callback(new Error($t('error.dateRange')));
       }
       else{
         callback();
@@ -123,23 +143,32 @@ export default{
         contents:[]
       },
       tableKey: 0,
-      downloadJobs:[],
+      jobs:[],
       orgs:[],
       current_org:0,
       rules:{
         devices:[
+          { required: true, message: $t('error.device'), trigger: 'blur' },
           {validator: validateDevice, trigger: 'blur'}
         ],
         dates:[
-          { required: true, message: '请输入下载日期', trigger: 'blur' },
-        ],
-        contents:[
-          { required: true, message: '请选择下载内容', trigger: 'blur' },
+          { required: true, message: $t('error.date'), trigger: 'blur' },
           { validator: validateDate, trigger: 'blur'}
         ],
-        listLoading: false
-      }
+        contents:[
+          { required: true, message: $t('error.content'), trigger: 'blur' },
+
+        ],
+
+      },
+      listLoading: false
     }
+  },
+  computed:{
+    ...mapState(
+      {
+        user: state=> state.user.Current
+      })
   },
   methods:{
     handleSizeChange: function(val){
@@ -152,11 +181,18 @@ export default{
     },
     getJob: function(query){
       var self = this;
-      axios.get('download', {params:{query}}).then(res=>{
-        self.downloadJobs = res.data.data;
+      this.listLoading = true;
+      var params_q ={
+        page: query.page,
+        limit: query.limit
+      }
+      axios.get('downloads', {params:params_q}).then(res=>{
+        self.jobs = res.data.data;
         self.total = res.data.meta.pagination.total;
+        this.listLoading = false;
       }).catch(error=>{
         console.error(error);
+        this.listLoading = false;
       })
     },
     getOrg: function(){
@@ -184,28 +220,28 @@ export default{
       if(current_org>0){
         params_q['org_id'] = current_org;
       }
-      this.listLoading = true;
+
       axios.get(path,{params: params_q}).then(function (res) {
         self.devices = res.data.data;
+
         }).catch(err=>{
         console.error(err)
-        self.error = { title: '发生错误', message: '出现异常，请稍后再试！' }
+        self.error = { title: $t('error.title'), message: $t('error.default')}
         switch (err.response && err.response.status) {
           case 401:
-            self.error.message = '用户名或密码错误！'
+            self.error.message = $t('error.auth')
             break
           case 500:
-            self.error.message = '服务器内部异常，请稍后再试！'
+            self.error.message = $t('error.service')
             break
         }
-        Message.error(self.error);
       });
     },
     handleDownloadRaw: function(){
       var query = this.options;
       let self = this;
       axios.post('download', query).then(res=>{
-        self.downloadJobs.push(res);
+        self.jobs.push(res);
       }).catch(error=>{
         console.error(error);
       })
@@ -225,10 +261,10 @@ export default{
     handleDel: function(row){
       let self = this;
       axios.delete('download/'+row.id).then(res=>{
-        _.remove(self.downloadJobs,function(val){
+        _.remove(self.jobs,function(val){
           return row.id == val.id;
         });
-        self.downloadJobs.sort();
+        self.jobs.sort();
       });
     },
     canDownload: function(status){
@@ -236,6 +272,9 @@ export default{
     },
     canDel: function(status){
       return status == "completed";
+    },
+    refresh: function(){
+      this.getJob(this.listQuery);
     }
   }
 }

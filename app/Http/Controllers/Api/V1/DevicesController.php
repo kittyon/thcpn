@@ -6,16 +6,18 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Device;
 use App\Models\Organization;
+use App\Models\Urole;
 use App\Transformers\DevicesTransformer;
 use App\Transformers\DeviceDataTransformer;
 use App\Http\Requests\Api\DeviceRequest;
+use App\Http\Requests\Api\DeviceAttachRequest;
 
 class DevicesController extends Controller
 {
     static $model = \App\Models\Device::class;
     static $permissions = [
-      'index' =>['dev_r'],
-      'show' =>['dev_r'],
+      'index' =>['dev_r','org_r'],
+      'show' =>['dev_r', 'org_r'],
       'detach' =>['dev_w','org_w'],
     ];
     //
@@ -86,7 +88,35 @@ class DevicesController extends Controller
       }
 
     }
-    public function attach()
+    public function attach(DeviceAttachRequest $request){
+      $dev = Device::where('iccid','=',$request->iccid)->first();
+      if(!$dev){
+        return $this->response->error('iccid 设备不存在',410);
+      }
+      if($dev->active == 1){
+        return $this->response->error('该设备已激活',410);
+      }
+
+      if($request->attach_type == 'user'){
+        $role = Urole::where('name' ,'=','deviceManager')->first();
+        User::find($request->user_id)->devices()->attach($dev->id, ['urole_ids'=>json_encode([$role->id])]);
+        $perms = $role->permissions()->get();
+        $dev->active = 1;
+        $dev->save();
+        return $this->response->item($dev, new DevicesTransformer($perms));
+      }
+
+      if($request->attach_type == 'org'){
+        $role = Urole::where('name','=', 'manager')->first();
+        Organization::find($request->org_id)->devices()->attach($dev->id,['urole_ids'=>json_encode([$role->id])]);
+        $perms = $role->permissions()->get();
+        $dev->active = 1;
+        $dev->save();
+        return $this->response->item($dev, new DevicesTransformer($perms));
+
+      }
+    }
+
     public function detach($device_id, Request $request){
       $org_id = $request->input('org_id', null);
 

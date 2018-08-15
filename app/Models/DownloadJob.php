@@ -2,12 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 
-class DownloadJob extends Model
+class DownloadJob extends Base
 {
     //
-    use SoftDeletes;
 
     protected $table = 'download_jobs';
 

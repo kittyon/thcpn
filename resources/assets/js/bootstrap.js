@@ -1,5 +1,9 @@
+import Pusher from 'pusher-js'
+import Echo from 'laravel-echo'
 
+window.Pusher = Pusher
 window._ = require('lodash');
+
 
 /**
  * We'll load jQuery and the Bootstrap jQuery plugin which provides support
@@ -14,6 +18,7 @@ try {
 } catch (e) {}
 
 window.Cookie = require('js-cookie');
+
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
  * to our Laravel back-end. This library automatically handles sending the
@@ -22,6 +27,22 @@ window.Cookie = require('js-cookie');
 
 window.axios = require('axios');
 
+const { key, cluster } = window.Laravel.pusher
+if (key) {
+  window.Echo = new Echo({
+    broadcaster: 'pusher',
+    key: key,
+    cluster: cluster
+  })
+
+  window.axios.interceptors.request.use(
+    config => {
+      config.headers['X-Socket-ID'] = window.Echo.socketId()
+      return config
+    },
+    error => Promise.reject(error)
+  )
+}
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
 require('./http');

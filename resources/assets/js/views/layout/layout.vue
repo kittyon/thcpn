@@ -31,19 +31,19 @@
             </div>
           </el-dropdown-menu>
         </el-dropdown>
-
-        <span class="header-btn">
-            <el-badge :value="3" class="badge">
+        <notification-dropdown></notification-dropdown>
+            <!--<el-badge :value="3" class="badge">
                     <i class="el-icon-bell"></i>
-            </el-badge>
-        </span>
+            </el-badge>-->
         <el-dropdown>
           <span class="header-btn">
               {{user.name}}<i class="el-icon-arrow-down el-icon--right"></i>
           </span>
+
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item><router-link :to="{ name: 'main-profile'}">个人中心</router-link></el-dropdown-item>
-            <el-dropdown-item @click.native="logout">退出系统</el-dropdown-item>
+            <el-dropdown-item><router-link :to="{ name: 'main-notification' }">消息中心</router-link></el-dropdown-item>
+            <el-dropdown-item ><router-link :to="{ name: 'main-profile'}">个人中心</router-link></el-dropdown-item>
+            <el-dropdown-item @click.native="logout" divided>退出系统</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </div>
@@ -89,9 +89,11 @@
 </template>
 
 <script>
+  import {mapState} from "vuex";
   import EuiFooter from './Footer.vue';
   import NavBar from './NavBar.vue'
   import Menu from '../../menu/index';
+  import notificationDropDown from '../notifications/notificationDropDown.vue'
   export default {
     data() {
       return {
@@ -99,10 +101,16 @@
         siteName: this.$Config.name.siteName,
         isCollapse: false,
         menu: Menu,
-        user: {}
       };
     },
+    computed:{
+      ...mapState(
+        {
+          user: state=> state.user.Current
+        })
+    },
     methods: {
+
       saveSwitchTabBarVal(v) {
         v ? localStorage.setItem('switchTabBar', v) : localStorage.removeItem('switchTabBar');
       },
@@ -141,10 +149,9 @@
         document.body.classList.add('sidebar-hidden')
       }
       this.$store.dispatch('getCurrentUser');
-      this.user = this.$store.getters.user;
     },
     components: {
-      EuiFooter, NavBar
+      EuiFooter, NavBar, "notification-dropdown": notificationDropDown
     },
   }
 </script>

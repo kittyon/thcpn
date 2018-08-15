@@ -55,7 +55,12 @@ let dataManager = menu.data.children;
 
 dataManager.download = {
   name: '数据下载',
-  path: '/download'
+  path: '/data/download'
+}
+
+dataManager.detail = {
+  name: '数据详情',
+  path: '/data/detail'
 }
 
 export default menu;

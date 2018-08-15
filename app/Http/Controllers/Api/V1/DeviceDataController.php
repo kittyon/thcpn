@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api\V1;
 use App\Models\Organization;
 use Illuminate\Http\Request;
 use App\Transformers\DeviceDataTransformer;
+use Illuminate\Support\Facades\Redis;
+use App\Models\DeviceData;
 
 class DeviceDataController extends Controller
 {
@@ -38,18 +40,38 @@ class DeviceDataController extends Controller
         return $this->response->errorUnauthorized('您无权获取相关数据信息!');
       }
     }
-    public function first(Request $request){
-      $device_id = $request->input('device_id');
+    public function first($device_id,$data_type, Request $request){
+
       $org_id = $request->input('org_id', null);
 
       if(!$this->_hasDevice($device_id, $org_id)){
         return $this->response->errorUnauthorized('您无权获取相关数据信息');
       }
 
-      $data = $this->_index(['device_id','=',$device_id],function (&$items) use ($request) {
-          $items->orderBy('ts', 'asc');
-        })->first();
-      return $this->response->item($data, new DeviceDataTransformer());
+      $data = json_decode(Redis::get($device_id.'-'.$data_type));
+
+      if(!$data){
+        if(!is_null($org_id)){
+          $roles = $this->_roles('organizations',$org_id);
+        }
+        else{
+          $roles = $this->_roles('devices',$device_id);
+        }
+        $data = $this->_index($roles, ['device_id','=',$device_id],function (&$items) use ($data_type) {
+            $items->where('type','=',$data_type)->orderBy('ts', 'asc');
+          })->first();
+        Redis::set($device_id.'-'.$data_type, json_encode($data));
+        return $this->response->item($data, new DeviceDataTransformer());
+      }
+      else{
+        $tmp = new DeviceData();
+        $tmp->data = $data->data;
+        $tmp->ts = $data->ts;
+        $tmp->id = $data->id;
+        $data = $tmp;
+        return $this->response->item($data, new DeviceDataTransformer());
+      }
+
 
     }
 

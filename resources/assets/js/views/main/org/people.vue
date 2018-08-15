@@ -30,14 +30,28 @@
     </div>
 
     <el-dialog :title="$t('table.create')" :visible.sync="dialogInvitVisible">
-      <span>输入邀请用户</span>
-      <el-autocomplete :fetch-suggestions="querySearch" @select="handleSelect" v-model="iUser" :trigger-on-focus="false">
+      <span>{{$t('org.inviteTitle')}}</span>
+      <!--<el-autocomplete :fetch-suggestions="querySearch" @select="handleSelect" v-model="iUser" :trigger-on-focus="false">
         <el-select v-model="selectType" slot="prepend" placeholder="请选择">
           <el-option label="用户名" value="name"></el-option>
           <el-option label="email" value="email"></el-option>
           <el-option label="用户手机" value="phone"></el-option>
         </el-select>
-      </el-autocomplete>
+        <template slot-scope="{ item }">
+          <div class="name">{{ item.name }}</div>
+        </template>
+      </el-autocomplete>-->
+      <el-select v-model="iUser" remote filterable reserve-keyword :placeholder="$t('org.input')"
+       :remote-method="querySearch"
+       :loading="loading">
+       <el-select v-model="selectType" slot="prepend" :placeholder="$t('org.inviteType')">
+         <el-option :label="$t('org.inviteTypeName')" value="name"></el-option>
+         <el-option :label="$t('org.inviteTypeEmail')" value="email"></el-option>
+         <el-option :label="$t('org.inviteTypePhone')" value="phone"></el-option>
+       </el-select>
+       <el-option v-for="item in invitingUsers" :key="item.id" :label="item.name" :value="item"></el-option>
+
+      </el-select>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogDetachVisible = false">{{$t('table.cancel')}}</el-button>
         <el-button type="primary" @click="inviteUser">{{$t('table.confirm')}}</el-button>
@@ -45,7 +59,7 @@
     </el-dialog>
 
     <el-dialog :title="$t('table.detach')" :visible.sync="dialogDetachVisible">
-      <span>从当前组织移除该用户？</span>
+      <span>{{$t('org.removePeopleTitle')}}</span>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogDetachVisible = false">{{$t('table.cancel')}}</el-button>
         <el-button type="primary" @click="detachUser">{{$t('table.confirm')}}</el-button>
@@ -62,6 +76,8 @@ export default{
     return {
       current_org: 0,
       peoples: [],
+      invitingUsers:[],
+      loading: false,
       listLoading: false,
       dialogInvitVisible: false,
       dialogDetachVisible: false,
@@ -121,8 +137,8 @@ export default{
         _.remove(self.peoples,function(p){return p.id == self.dUser.id});
         self.peoples.sort();
         self.$notify({
-          title: '成功',
-          message: '移除成员成功',
+          title: $t('success.title'),
+          message: $t('success.removePeople'),
           type: 'success',
           duration: 2000
         })
@@ -139,8 +155,8 @@ export default{
         var param_t = {'org_id': this.current_org, 'user_id': this.iUser.id};
         axios.post('user/invite', param_t).then(res=>{
           self.$notify({
-            title: '成功',
-            message: '邀请成功，等待用户答复',
+            title: $t('success.title'),
+            message: $t('success.invitePeople'),
             type: 'success',
             duration: 2000
           });
@@ -155,19 +171,19 @@ export default{
     handleSelect: function(item){
 
     },
-    querySearch(queryString, cb) {
+    querySearch(queryString) {
         var param_t = {'colName': this.selectType, 'content': queryString};
         let self = this;
-        axios.get('user/search', param_t).then(res=>{
-          cb(res);
+        self.loading = true;
+        axios.get('user/search', {params:param_t}).then(res=>{
+          console.log(res.data.data);
+          self.invitingUsers = res.data.data;
+          self.loading = false;
         }).catch(err=>{
         console.error(err)
-        self.error = { title: '发生错误', message: '出现异常，请稍后再试！' }
-        switch (err.response && err.response.status) {
-          case 500:
-            self.error.message = '服务器内部异常，请稍后再试！'
-            break
-        }
+        self.error = { title: $t('error.title'), message: $t('error.default') }
+
+        self.loading = false;
         Message.error(self.error);
       });
       },
@@ -185,12 +201,8 @@ export default{
         self.total = res.data.meta.pagination.total;
         }).catch(err=>{
         console.error(err)
-        self.error = { title: '发生错误', message: '出现异常，请稍后再试！' }
-        switch (err.response && err.response.status) {
-          case 500:
-            self.error.message = '服务器内部异常，请稍后再试！'
-            break
-        }
+        self.error = { title: $t('error.title'), message: $t('error.default') }
+
         Message.error(this.error);
       });
       this.listLoading = false;

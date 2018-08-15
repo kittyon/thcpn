@@ -12,6 +12,7 @@ use App\Models\DeviceData;
 use App\Models\Device;
 use App\Models\DownloadJob;
 use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Log;
 
 use ZipArchive;
 
@@ -48,48 +49,96 @@ class ProcessDownload implements ShouldQueue
         $folder_path = $folder_name.'/';
         Storage::makeDirectory($folder_path);
         $query_options = json_decode($this->options['options']);
-        for ($i=0; $i < count($query_options->device_ids); $i++){
-            $device_datas = DeviceData::where('device_id', $query_options->device_ids[$i])
-                                        ->whereBetween('ts', [$query_options->start_at, $query_options->end_at])
+        foreach($query_options->devices as $device_id){
+          if(in_array('image',$query_options->contents)){
+            $image_folder_path = $folder_path.$device_id.'/';
+            Storage::makeDirectory($image_folder_path);
+            $client = new Client();
+            $images = DeviceData::where('device_id', $device_id)
+                                        ->where('type','image')
+                                        ->whereBetween('ts', [$query_options->dates[0], $query_options->dates[1]])
                                         ->get();
-            $device_datas_image = array();
-            $raw_device_datas_data = $device_datas->filter(function($item, $key) use (&$device_datas_image) {
-                $data = $item->data;
-                $config = $item->config->data;
-                foreach ($data as $key => $value){
-                    $type = $config[$key]['type'];
-                    if ($type == 'image'){
-                        $item->image_key = $key;
-                        array_push($device_datas_image, $item);
-                        return false;
-                    }
-                }
-                return true;
-            });
-            if ($query_options->with_image){
-                $image_folder_path = $folder_path.$query_options->device_ids[$i].'/';
-                Storage::makeDirectory($image_folder_path);
-                $client = new Client();
-                foreach ($device_datas_image as $device_data_image) {
-                    $image_url = $device_data_image->data[$device_data_image->image_key]['value'];
-                    $res = $client->request('GET', $image_url_prefix.$image_url);
-                    // $image_file_path = $image_folder_path.($device_data_image->created_at)->toDateTimeString().'.jpg';
-                    $image_file_path = $image_folder_path.$device_data_image->ts.'.jpg';
-                    Storage::disk('local')->put($image_file_path, $res->getBody()->getContents());
-                }
+            foreach ($images as $img) {
+              foreach($img->data as $key=>$val){
+                $image_folder_key_path = $image_folder_path.'/'.$key.'/';
+                Storage::makeDirectory($image_folder_key_path);
+                $image_url = $val['value'];
+                $res = $client->request('GET', $image_url_prefix.$image_url);
+                $image_file_path = $image_folder_key_path.$img->ts.'.jpg';
+                Storage::disk('local')->put($image_file_path, $res->getBody()->getContents());
+              }
             }
-            if ($query_options->with_data){
-                $device = Device::find($query_options->device_ids[$i]);
-                $csv_file_name = $device->name.'-'.($download_job->created_at)->toDateTimeString().'.csv';
-                $processed_data_collection = $this->data_process($raw_device_datas_data);
-                $file = fopen($root_path.$folder_path.$csv_file_name, 'w+');
-                foreach ($processed_data_collection as $line) {
-                    fputcsv($file, $line);
-                }
-                fclose($file);
-            }
-        }
+          }
 
+          if(in_array('data', $query_options->contents)){
+            $device = Device::find($device_id);
+            $config = $device->config()->first();
+            Log::info($config);
+            if($config->version == "2.0"){
+              $cf = $config->data;
+              $cfs = array();
+              foreach($cf as $item){
+                foreach($item['params'] as $param){
+                  $cfs[$param['key']] = ['name'=>$param['name'],
+                   'type'=> $param['type'],
+                   'unit'=>$param['unit'],
+                   'desc'=>$param['desc'],
+                   'value'=>0];
+                }
+              }
+            }
+            else{
+              $cfs = $config->data;
+              foreach($cfs as $k=>$c){
+                $cfs[$k]['value'] = 0;
+              }
+            }
+
+            $csv_file_name = $device->name.'-'.($download_job->created_at)->toDateTimeString().'.csv';
+            $datas = DeviceData::where('device_id', $device_id)
+                                        ->where('type','data')
+                                        ->whereBetween('ts', [$query_options->dates[0], $query_options->dates[1]])
+                                        ->get();
+            $title = array();
+            array_push($title, 'date');
+            foreach ($cfs as $key => $value) {
+              if($value['type']!='image'){
+                array_push($title,$value['name']);
+              }
+              else{
+                unset($cfs[$key]);
+              }
+
+            }
+            $file = fopen($root_path.$folder_path.$csv_file_name, 'w+');
+            fputcsv($file, $title);
+
+            foreach($datas as $dt){
+              $line = array();
+              array_push($line, $dt->ts);//time
+              foreach($dt->data as $k =>$v){
+                if(array_key_exists($k,$cfs)){
+                  $cfs[$k]['value'] = $v['value'];
+                }
+              }
+
+              foreach($cfs as $k=>$c){
+                array_push($line,$cfs[$k]['value']);
+
+              }
+              Log::info($line);
+
+              fputcsv($file,$line);
+              foreach($cfs as $k=>$c){
+                $cfs[$k]['value'] = 0;
+              }
+            }
+
+            fclose($file);
+          }
+
+
+        }
 
         $zip = new ZipArchive();
         if ($zip->open($root_path.$folder_name.'.zip', ZipArchive::CREATE | ZipArchive::OVERWRITE) != true) {
@@ -109,30 +158,6 @@ class ProcessDownload implements ShouldQueue
         $download_job->save();
     }
 
-    public function data_process($raw_data_collection){
-        $processed_data_collection = array();
-        $device_config_id = 0;
-        foreach ($raw_data_collection as $raw_data){
-            if ($raw_data->device_config_id != $device_config_id) {
-                $device_config_id = $raw_data->device_config_id;
-                $title_line = array();
-                array_push($title_line, 'date');
-                foreach ($raw_data->config->data as $key => $value) {
-                    if ($value['type'] != 'image') {
-                        array_push($title_line, $value['desc']);
-                    }
-                }
-                array_push($processed_data_collection, $title_line);
-            }
-            $data_line = array();
-            array_push($data_line, $raw_data->ts);
-            foreach ($raw_data->data as $key => $value) {
-                array_push($data_line, $value['value']);
-            }
-            array_push($processed_data_collection, $data_line);
-        }
-        return $processed_data_collection;
-    }
 
     public function add_file_to_zip($path, $zip){
         $handler = opendir($path);

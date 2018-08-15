@@ -19,7 +19,7 @@
         </el-form-item>
       </el-form>
     </el-card>
-    <el-card class="box-card">
+    <el-card class="box-card" style="margin-top:20px">
       <div slot="header" class="clearfix">
         <span>{{$t('account.changeInfo')}}</span>
       </div>
@@ -41,7 +41,7 @@ export default{
   data(){
     var validatePass = (rule, value, callback)=>{
       if (value === '') {
-          callback(new Error('请输入密码'));
+          callback(new Error($t('error.password')));
         } else {
           if (this.reset.checkPass !== '') {
             this.$refs.reset.validateField('confirmPassword');
@@ -52,9 +52,9 @@ export default{
 
     var validateConfirmPass = (rule, value, callback)=>{
       if (value === '') {
-          callback(new Error('请再次输入密码'));
+          callback(new Error($t('error.confirmPassword')));
         } else if (value !== this.reset.newPassword) {
-          callback(new Error('两次输入密码不一致!'));
+          callback(new Error($t('error.diffrentPassword')));
         } else {
           callback();
         }
@@ -68,7 +68,7 @@ export default{
       dialogChangeNameVisible:false,
       rules:{
         password: [
-            { required: true, message: '请输入旧密码', trigger: 'blur' },
+            { required: true, message: $t('account.oldPasswordInfo'), trigger: 'blur' },
           ],
           newPassword:[
             {validator: validatePass, trigger: 'blur'}

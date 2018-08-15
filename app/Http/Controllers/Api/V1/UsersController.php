@@ -12,6 +12,8 @@ use App\Http\Requests\Api\UserInviteRequest;
 use App\Transformers\UserTransformer;
 use Illuminate\Support\Facades\Auth;
 use App\Traits\PassportToken;
+use TomLingham\Searchy\Facades\Searchy;
+
 
 class UsersController extends Controller
 {
@@ -53,13 +55,14 @@ class UsersController extends Controller
     }
     public function orgInvite(UserInviteRequest $request){
         $owner_id = $this->user()->id;
-        
+
     }
 
     public function search(UserSearchRequest $request){
       $colName = $request->colName;
       $searchContent = $request->content;
 
-      $this->response->collection(\App\Models\User::hydrate(Searchy::search('users')->fields($colName)->query($searchContent)->limit(10)->get()), new UserTransformer());
+      //$this->response->collection(\App\Models\User::hydrate(Searchy::search('users')->fields($colName)->query($searchContent)->get()), new UserTransformer());
+      return $this->response->collection(\App\Models\User::search($searchContent)->get(), new UserTransformer());
     }
 }

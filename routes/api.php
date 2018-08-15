@@ -47,6 +47,7 @@ $api->version('v1', [
               $api->post('user/invite', 'UsersController@Invite')->name('api.user.invite');
               // 获取devices信息
               $api->get('devices','DevicesController@index')->name('api.devices.index');
+              $api->post('devices/attach','DevicesController@attach')->name('api.devices.attach');
               $api->get('device/{device_id}','DevicesController@show')->name('api.device.show');
               $api->put('device/{device_id}', 'DevicesController@update')->name('api.device.update');
               $api->post('device/{device_id}/detach', 'DevicesController@detach')->name('api.device.detach');
@@ -66,6 +67,7 @@ $api->version('v1', [
               // 更改device的config
               $api->post('device/{device_id}/config','DeviceConfigController@store')->name('api.config.store');
               // 获取device的data数据
+              $api->get('device/{device_id}/datas/new/{data_type}','DeviceDataController@first')->name('api.deviceData.first');
               $api->get('device/{device_id}/datas','DeviceDataController@index')->name('api.deviceData.index');
 
               // 获取invitation信息
@@ -74,7 +76,17 @@ $api->version('v1', [
               $api->post('invitation','InvitationController@store')->name('api.inivataion.store');
               $api->post('invitation/{inv_id}/pass','InvitationController@pass')->name('api.invitation.pass');
               $api->post('invitation/{inv_id}/unpass','InvitationController@unpass')->name('api.invitation.unpass');
-              $api->delete('invitation/{inv_id}','InvitationController@Delete')->name('api.invitation.delete');
+              $api->delete('invitation/{inv_id}','InvitationController@delete')->name('api.invitation.delete');
+              // notification 相关
+              $api->get('notifications','NotificationController@index')->name('api.notifications.index');
+              $api->get('notifications/all','NotificationController@all')->name('api.notifications.all');
+              $api->post('notifications/{id}/read', 'NotificationController@markAsRead')->name('api.notification.markAsRead');
+              $api->post('notifications/mark-all-read','NotificationController@markAllRead')->name('api.notification.markAllRead');
+              $api->post('notifications','NotificationController@store')->name('api.notification.store');
+
+              $api->get('downloads','DownloadController@index')->name('api.download.index');
+              $api->post('download','DownloadController@store')->name('api.download.store');
+              $api->delete('download','DownloadController@destroy')->name('api.download.destroy');
           });
       });
 

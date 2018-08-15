@@ -53,6 +53,26 @@ export default {
     clipboardDemo: 'Clipboard',
     i18n: 'I18n'
   },
+  auth:{
+    login: 'Login',
+    register: 'Register',
+    backTo: 'Back To',
+    passwordPlaceholder: 'Please input password',
+    namePlaceholder: 'user name/phone',
+    loading: 'Loading',
+    name: 'Name',
+    password: 'Password',
+    step: 'Step',
+    phonePlaceholder:'Please input phone',
+    captchaCode:'Please input captcha code',
+    captchaTitle:'Click image to refresh code',
+    captchaGot:'Captcha Code',
+    usernamePlaceholder:'Please input name',
+    emailPlaceholder:'Please input email',
+    back:'back',
+    next:'Next',
+
+  },
   navbar: {
     logOut: 'Log Out',
     dashboard: 'Dashboard',
@@ -130,7 +150,8 @@ export default {
     detail: 'Detail',
     addsub: 'add Sub-Org',
     description: 'Description',
-    create:'Create'
+    create:'Create',
+    loading:'Loading',
   },
   device:{
     config: 'Config',
@@ -155,7 +176,9 @@ export default {
     version:'Version',
     name:'Name',
     key:'Key',
-    desc:'Description'
+    desc:'Description',
+    titleImageCtrl:'Image Upload Interval',
+    titleDataCtrl:'Data Upload Interval',
   },
   profile:{
     invitation:'Invitation',
@@ -184,7 +207,14 @@ export default {
     name:'Name',
     description:'Description',
     update:'Update',
-    inviteUser:'Invite User'
+    inviteUser:'Invite User',
+    inviteTitle:'Input user for invitation',
+    inviteType:'User\'s',
+    inviteTypeName:'Name',
+    inviteTypeEmail:'Email',
+    inviteTypePhone:'Phone',
+    input:'Input...',
+    removePeopleTitle:'Remove the user from current organization?',
   },
   account:{
     oldPassword: "Password",
@@ -193,7 +223,8 @@ export default {
     resetPassword:"Reset Password",
     update:"Update",
     changeInfo:"Change User Information",
-    changeName:"Change User Name"
+    changeName:"Change User Name",
+    oldPasswordInfo:'Please input old password',
   },
   errorLog: {
     tips: 'Please click the bug icon in the upper right corner',
@@ -219,7 +250,7 @@ export default {
     closeOthers: 'Close Others',
     closeAll: 'Close All'
   },
-  download:{
+  data:{
     device:"Device",
     to: "to",
     date:"Date",
@@ -236,6 +267,34 @@ export default {
     created_at:'Created at',
     id:"ID",
     processing:"Processing",
-    completed:"Completed"
+    completed:"Completed",
+    devicePlaceholder:"Selete devices for download",
+    content:"Contents",
+    operation:"Operation",
+    refresh:"Refresh",
+    detailContent:"Data Type",
+    detailExecute:"Load",
+    contentPlaceholder:"Please select data type"
+  },
+  success:{
+    title:"Success",
+    config:"Device config OK!",
+    deviceRefresh:"Device Refresh OK!",
+    removePeople:"Remove People OK!",
+    invitePeople:'Inivitation succcess, wait for the acception',
+    refresh:'Refresh OK!'
+  },
+  error:{
+    date:"Please input date",
+    dateRange:"The range needs less than 30 days",
+    device:"Select device",
+    content:"Select content",
+    auth:'name or password error!',
+    server:'server inner error, try again',
+    title:'Error',
+    default:'Ooh, error, try again!',
+    password:'Please input password',
+    confirmPassword:'Please confirm password',
+    diffrentPassword:'Passwords are different',
   }
 }

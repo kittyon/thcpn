@@ -5,52 +5,52 @@
       <el-alert v-if="error" :title="error.title" type="warning" :description="error.message" show-icon/>
     </header>
     <el-steps :active="active" finish-status="success">
-      <el-step title="步骤 1"></el-step>
-      <el-step title="步骤 2"></el-step>
-      <el-step title="步骤 3"></el-step>
+      <el-step :title="$t('auth.step')+'1'"></el-step>
+      <el-step :title="$t('auth.step')+'2'"></el-step>
+      <el-step :title="$t('auth.step')+'3'"></el-step>
     </el-steps>
     <el-form class="register-form" auto-complete="off" :model="model" :rules="rules" ref="register-form" label-position="left">
-      <h2 class="heading">用户注册</h2>
+      <h2 class="heading">{{$t('auth.register')}}</h2>
       <el-form-item prop="phone" v-if="this.active==0">
-        <el-input type="text" v-model="model.phone" placeholder="请输入手机号"/>
+        <el-input type="text" v-model="model.phone" :placeholder="$t('auth.phonePlaceholder')"/>
       </el-form-item>
       <div class="captcha-container">
         <el-form-item prop="captcha_code" v-if="this.active==1">
             <el-row>
               <el-col :span="12">
-                <el-input v-model="model.captcha_code" placeholder="请输入验证码">
+                <el-input v-model="model.captcha_code" :placeholder="$t('auth.captchaCode')">
                 </el-input>
               </el-col>
               <el-col :span="8">
-                <img  title="点击图片重新获取验证码" v-bind:src="captcha_image_content_ed" @click="get_captcha(()=>{this.acitve = 0;this.acitve = 1;},()=>{})"/>
+                <img  :title="$t('auth.captchaTitle')" v-bind:src="captcha_image_content_ed" @click="get_captcha(()=>{this.acitve = 0;this.acitve = 1;},()=>{})"/>
               </el-col>
             </el-row>
         </el-form-item>
       </div>
       <div v-if="this.active==2">
         <el-form-item prop="verification_code">
-          <el-input v-model="model.verification_code" placeholder="请输入验证码">
+          <el-input v-model="model.verification_code" :placeholder="$t('auth.captchaCode')">
 
           </el-input>
-          <el-button slot="append">获取验证码</el-button>
+          <el-button slot="append">{{$t('auth.captchaGot')}}</el-button>
         </el-form-item>
         <el-form-item prop="name">
-          <el-input v-model="model.name" placeholder="请输入用户名"/>
+          <el-input v-model="model.name" :placeholder="$t('auth.usernamePlaceholder')"/>
         </el-form-item>
         <el-form-item prop="email">
-          <el-input type="email" v-model="model.email" placeholder="请输入email"/>
+          <el-input type="email" v-model="model.email" :placeholder="$t('auth.emailPlaceholder')"/>
         </el-form-item>
         <el-form-item prop="password">
-          <el-input type="password" v-model="model.password" placeholder="请输入密码"/>
+          <el-input type="password" v-model="model.password" :placeholder="$t('auth.passwordPlaceholder')"/>
         </el-form-item>
       </div>
       <el-form-item>
-        <el-button @click="last" v-if="active!=0" icon="el-icon-arrow-left">上一步</el-button>
-        <el-button type="primary" :loading="loading" @click="submit('register-form')" icon="el-icon-arrow-right" style="float: right">{{ active==2 ? '注册' : '下一步' }}</el-button>
+        <el-button @click="last" v-if="active!=0" icon="el-icon-arrow-left">{{$t('auth.back')}}</el-button>
+        <el-button type="primary" :loading="loading" @click="submit('register-form')" icon="el-icon-arrow-right" style="float: right">{{ active==2 ? $t('auth.register') : $t('auth.next') }}</el-button>
       </el-form-item>
     </el-form>
-    <footer class="login-footer">
-      ← Back to <a href="/">THCreate</a>
+    <footer class="login-footer clearfix">
+      ← {{$t('auth.backTo')}}<a href="/">THCreate</a>
     </footer>
   </section>
 </template>
@@ -74,7 +74,7 @@ export default {
     // form validate rules
     const rules = {
       phone: [
-        { required: true, message: '请输入用户名' },
+        { required: true, message: '请输入手机号', trigger:'blur' },
         { min: 2, max: 16, message: '长度在 2 到 16 个字符' }
       ],
       name: [
