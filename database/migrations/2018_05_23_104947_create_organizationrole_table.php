@@ -22,6 +22,7 @@ class CreateOrganizationroleTable extends Migration
             $table->timestamps();
         });
         Schema::create('orole_organization', function (Blueprint $table) {
+            $table->increments('id');
             $table->integer('organization_id')->unsigned();
             $table->integer('orole_id')->unsigned();
 
@@ -29,8 +30,10 @@ class CreateOrganizationroleTable extends Migration
                 ->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('orole_id')->references('id')->on('oroles')
                 ->onUpdate('cascade')->onDelete('cascade');
-
-            $table->primary(['organization_id', 'orole_id']);
+            $table->softDeletes();
+            $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
+            $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
+            //$table->primary(['organization_id', 'orole_id']);
         });
     }
 
@@ -41,7 +44,8 @@ class CreateOrganizationroleTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('oroles');
         Schema::dropIfExists('orole_organization');
+        Schema::dropIfExists('oroles');
+
     }
 }

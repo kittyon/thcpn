@@ -41,7 +41,7 @@ export default{
   data(){
     var validatePass = (rule, value, callback)=>{
       if (value === '') {
-          callback(new Error($t('error.password')));
+          callback(new Error(this.$t('error.password')));
         } else {
           if (this.reset.checkPass !== '') {
             this.$refs.reset.validateField('confirmPassword');
@@ -52,9 +52,9 @@ export default{
 
     var validateConfirmPass = (rule, value, callback)=>{
       if (value === '') {
-          callback(new Error($t('error.confirmPassword')));
+          callback(new Error(this.$t('error.confirmPassword')));
         } else if (value !== this.reset.newPassword) {
-          callback(new Error($t('error.diffrentPassword')));
+          callback(new Error(this.$t('error.diffrentPassword')));
         } else {
           callback();
         }
@@ -68,7 +68,7 @@ export default{
       dialogChangeNameVisible:false,
       rules:{
         password: [
-            { required: true, message: $t('account.oldPasswordInfo'), trigger: 'blur' },
+            { required: true, message: this.$t('account.oldPasswordInfo'), trigger: 'blur' },
           ],
           newPassword:[
             {validator: validatePass, trigger: 'blur'}

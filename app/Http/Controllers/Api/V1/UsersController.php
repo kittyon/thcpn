@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Http\Requests\Api\UserRequest;
 use App\Http\Requests\Api\UserSearchRequest;
 use App\Http\Requests\Api\UserInviteRequest;
+use App\Http\Requests\Api\ResetPassRequest;
 
 use App\Transformers\UserTransformer;
 use Illuminate\Support\Facades\Auth;
@@ -20,6 +21,22 @@ class UsersController extends Controller
     //
     use PassportToken;
 
+
+    public function resetPass(ResetPassRequest $request){
+      $resetData = \Cache::get($request->resetPass_key);
+      if(!$resetData){
+        return $this->response->error('验证码已经失效', 422);
+      }
+      if (!hash_equals($resetData['code'], $request->resetPass_code)) {
+          // 返回401
+          return $this->response->errorUnauthorized('验证码错误');
+      }
+      $user = User::where('phone','=',$resetData['phone'])->first();
+      $user->password = bcrypt($request->password);
+      $user->save();
+      return $this->response->array($user)->setStatusCode(201);
+
+    }
     public function store(UserRequest $request)
     {
         $verifyData = \Cache::get($request->verification_key);
@@ -35,8 +52,8 @@ class UsersController extends Controller
 
         $user = User::create([
             'name' => $request->name,
-            'email' => $request->email,
-            'phone' => $verifyData['phone'],
+            $request->type => $request[$request->type],
+            
             'password' => bcrypt($request->password),
         ]);
 

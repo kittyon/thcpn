@@ -23,4 +23,8 @@ class Device extends Base
     {
         return $this->morphMany('App\Models\Invitation', 'invitationable');
     }
+
+    public function getFullNameAttribute($v){
+      return $this->attributes['id']."-".$this->attributes['name'];
+    }
 }

@@ -16,6 +16,11 @@ return [
         'email' => [
             'title' => 'Email',
         ],
+        'devices' =>[
+          'title' => '设备',
+          'relationship' => 'devices',
+          'select' => "(:table).name"
+        ],
         'created_at',
         'operation' => [
             'title'  => '管理',
@@ -33,6 +38,10 @@ return [
         'email' => [
             'title' => 'Email',
         ],
+        'password' =>[
+            'title' => '密码',
+            'type' => 'password'
+        ]
     ],
     'filters' => [
         'id' => [

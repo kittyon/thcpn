@@ -60,8 +60,24 @@ return array(
      */
     'menu' => [
       '用户管理' => [
-            'users' // 对应需要创建的文件：`config/administrator/users.php`
+            'users', // 对应需要创建的文件：`config/administrator/users.php`
+            'DeviceUser',
+            'DownloadJob',
         ],
+      '设备管理' => [
+            'devices',
+            'DeviceConfig',
+            'DeviceData'
+        ],
+      '组织管理' => [
+            'organizations',
+            'DeviceOrganization',
+            'UserOrganization'
+        ],
+      '权限管理' => [
+            'Permissions',
+            'Uroles',
+        ]
     ],
 
     /*

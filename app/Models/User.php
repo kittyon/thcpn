@@ -46,7 +46,9 @@ class User extends Authenticatable implements JWTSubject
     {
         return [];
     }
-
+    public function getFullNameAttribute($v){
+      return $this->attributes['id']."-".$this->attributes['name'];
+    }
     public function download_jobs()
     {
         return $this->hasMany('App\Models\DownloadJob');
@@ -63,6 +65,7 @@ class User extends Authenticatable implements JWTSubject
 
     public function devices(){
       return $this->belongsToMany('App\Models\Device')->withPivot(['urole_ids']);
+      //return $this->hasMany('App\Models\Device')->withPivot(['urole_ids']);
     }
 
     public function organizations(){

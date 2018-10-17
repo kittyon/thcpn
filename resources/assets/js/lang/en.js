@@ -71,7 +71,15 @@ export default {
     emailPlaceholder:'Please input email',
     back:'back',
     next:'Next',
+    phone:'Phone',
+    reset:'Reset',
+    cancel:'Cancel',
+    resetPassword:'Please input new password',
+    resetConfirmPassword:'Confirm new password'
 
+  },
+  reset:{
+    waiting: "Waiting ",
   },
   navbar: {
     logOut: 'Log Out',

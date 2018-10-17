@@ -15,8 +15,9 @@
       <el-button type="primary" :loading="loading" @click="submit('login-form')">{{ loading ? $t('auth.loading') : $t('auth.login')}}</el-button>
     </el-form>
     <footer class="login-footer clearfix">
-      ← {{$t('auth.backTo')}}<a href="/">THCreate</a>
-      <router-link :to="{ name: 'register'}"  style="float: right;color: #3C8DBC;font-size: 14px">{{$t('auth.register')}}</router-link>
+    
+      <router-link :to="{ name: 'register'}"  style="float: right;color: #3C8DBC;font-size: 14px; margin:2px">{{$t('auth.register')}}</router-link>
+      <router-link :to="{ name: 'password-reset'}"  style="float: right;color: #3C8DBC;font-size: 14px;margin:2px">{{$t('auth.forget')}}</router-link>
     </footer>
   </section>
 </template>

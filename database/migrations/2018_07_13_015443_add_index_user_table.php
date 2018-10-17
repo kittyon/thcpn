@@ -15,9 +15,9 @@ class AddIndexUserTable extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             //
-        $table->index('name');
-        $table->index('email');
-        $table->index('phone');
+        //$table->index('name');
+        //$table->index('email');
+        //$table->index('phone');
         });
     }
 
@@ -30,9 +30,9 @@ class AddIndexUserTable extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             //
-        $table->dropIndex('name');
-        $table->dropIndex('email');
-        $table->dropIndex('phone');
+        //$table->dropIndex('name');
+        //$table->dropIndex('email');
+        //$table->dropIndex('phone');
         });
     }
 }

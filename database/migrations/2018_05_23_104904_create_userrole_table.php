@@ -31,7 +31,11 @@ class CreateUserroleTable extends Migration
             $table->foreign('urole_id')->references('id')->on('uroles')
                 ->onUpdate('cascade')->onDelete('cascade');
 
-            $table->primary(['user_id', 'urole_id']);
+
+            //$table->primary(['user_id', 'urole_id']);
+            $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
+            $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->softDeletes();
         });
     }
 
@@ -42,8 +46,9 @@ class CreateUserroleTable extends Migration
      */
     public function down()
     {
+        Schema::dropIfExists('urole_user');
         Schema::dropIfExists('uroles');
 
-        Schema::dropIfExists('urole_user');
+
     }
 }

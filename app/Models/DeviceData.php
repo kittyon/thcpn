@@ -19,4 +19,16 @@ class DeviceData extends Base
     public function setDataAttribute($v) {
         $this->attributes['data'] = json_encode($v);
     }
+
+    public function setDataTextAttribute($v){
+        $this->attributes['data'] = $v;
+    }
+
+    public function getDataTextAttribute($v){
+      return $v;
+    }
+
+    public function device(){
+      $this->BelongsTo("App\Models\Device");
+    }
 }

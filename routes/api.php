@@ -95,15 +95,22 @@ $api->version('v1', [
     'limit'=>config('api.rate_limits.sign.limit'),
     'expires'=>config('api.rate_limits.sign.expires'),
   ],function($api){
+
+    $api->post('reset/password','UsersController@resetPass')->name('api.users.resetPass');
+    $api->post('reset/code','VerificationCodesController@resetPass')->name('api.verificationCodes.resetPass');
     // 短信验证码
-    $api->post('verificationCodes', 'VerificationCodesController@store')
-        ->name('api.verificationCodes.store');
+    $api->post('verificationCodes/phone', 'VerificationCodesController@storeByPhone')
+        ->name('api.verificationCodes.phone.store');
+    $api->post('verificationCodes/email', 'VerificationCodesController@storeByEmail')
+        ->name('api.VerificationCodes.email.store');
     // 用户注册
     $api->post('users', 'UsersController@store')
         ->name('api.users.store');
     // 图片验证码
     $api->post('captchas', 'CaptchasController@store')
         ->name('api.captchas.store');
+    //$api->post('captchas/email', 'CaptchasController@storeByEmail')
+    //    ->name('api.captchas.email.store');
     // 第三方登录
     $api->post('socials/{social_type}/authorizations', 'AuthorizationsController@socialStore')
           ->name('api.socials.authorizations.store');

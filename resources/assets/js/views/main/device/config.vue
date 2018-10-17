@@ -73,8 +73,8 @@ export default {
       control: {},
       cron: "",
       cronOption: {
-        img_collector_invl: $t("config.titleImageCtrl"),
-        data_capture_invl: $t('config.titleDataCtrl')
+        img_collector_invl: this.$t("config.titleImageCtrl"),
+        data_capture_invl: this.$t('config.titleDataCtrl')
       },
       cronPopover: {},
       dialogCronVisible:false,
@@ -135,10 +135,10 @@ export default {
       var self = this;
       var tmpConfig = {data: JSON.stringify(this.config.data), control: JSON.stringify(this.config.control), version: this.config.version};
       axios.post(this.$route.path,tmpConfig).then(res=>{
-        this.isChanged = false;
-        this.$notify({
-          title: $t('success.title'),
-          message: $t('success.config'),
+        self.isChanged = false;
+        self.$notify({
+          title: self.$t('success.title'),
+          message: self.$t('success.config'),
           type: 'success',
           duration: 2000
         })

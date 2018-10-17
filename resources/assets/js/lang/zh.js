@@ -7,7 +7,9 @@ export default {
     namePlaceholder: '请输入名称/电话',
     loading: '载入中',
     name: '用户名',
+    phone:'电话',
     password: '密码',
+    confirmPassword:'确认密码',
     step: '步骤',
     phonePlaceholder:'请输入手机号',
     captchaCode:'请输入验证码',
@@ -17,7 +19,22 @@ export default {
     emailPlaceholder:'请输入email',
     back:'上一步',
     next:'下一步',
+    reset:'重置',
+    cancel:'取消',
+    forget:'忘记密码?',
+    resetPassword:'请输入新密码',
+    resetConfirmPassword:'请确认新密码',
+    toPhone:"手机注册",
+    toEmail:"邮箱注册",
+    key:"验证码",
+    validateEmail:"邮箱验证",
+    validatePhone:"手机验证",
+    send:"发送"
 
+
+  },
+  reset:{
+    waiting: "稍等",
   },
   route: {
     dashboard: '首页',
@@ -207,7 +224,8 @@ export default {
     resetPassword:"更改密码",
     update:"更新",
     changeInfo:"更改用户信息",
-    changeName:"更改用户名称"
+    changeName:"更改用户名称",
+    oldPasswordInfo:'请输入旧密码',
   },
   org:{
     add: '组织添加',
@@ -294,6 +312,7 @@ export default {
     removePeople:"移除成员成功",
     invitePeople:'邀请成功，等待用户答复',
     refresh:'更新成功',
+    attachDevice:'添加设备成功'
 
 
   },
@@ -307,7 +326,9 @@ export default {
     title:'发生错误',
     default:'出现异常，请稍后再试！',
     password:'请输入密码',
+    captcha:'请输入验证码',
     confirmPassword:'请再次输入密码',
     diffrentPassword:'两次输入密码不一致',
+    phone:"请输入您的电话号码"
   }
 }

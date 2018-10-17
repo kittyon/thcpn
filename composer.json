@@ -11,6 +11,7 @@
         "dingo/api": "2.0.0-alpha2",
         "doctrine/dbal": "^2.7",
         "fideloper/proxy": "~3.3",
+        "gregwar/captcha": "1.*",
         "guzzlehttp/guzzle": "~5.3|~6.0",
         "laravel-notification-channels/webpush": "^3.0",
         "laravel/framework": "5.5.*",
@@ -20,15 +21,15 @@
         "liyu/dingo-serializer-switch": "^0.3.0",
         "overtrue/easy-sms": "^1.0",
         "predis/predis": "^1.1",
+        "pusher/pusher-php-server": "^3.0",
         "socialiteproviders/weixin": "^4.0",
+        "spatie/laravel-mailable-test": "^2.0",
         "summerblue/administrator": "^1.0",
         "tom-lingham/searchy": "2.*",
         "toplan/laravel-sms": "~2.6",
         "tymon/jwt-auth": "1.0.0-rc.2",
         "upyun/sdk": "^2.2",
-        "yangyifan/upload": "v0.2",
-        "pusher/pusher-php-server": "^3.0",
-        "gregwar/captcha":"1.*"
+        "yangyifan/upload": "v0.2"
     },
     "require-dev": {
         "filp/whoops": "~2.0",

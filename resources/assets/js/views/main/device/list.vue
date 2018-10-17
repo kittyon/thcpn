@@ -187,14 +187,11 @@ export default {
         params['org_id'] = this.current_org;
       }
       axios.post('device/'+ tempData.id+'/detach', params).then(res=>{
+        _.remove(self.devices,function(d){
+          return d.id == tempData.id;
+        });
+        self.devices.sort();
         this.dialogDetachVisible = false;
-        _.remove(self.devices,
-        this.$notify({
-          title: '成功',
-          message: '解除绑定成功',
-          type: 'success',
-          duration: 2000
-        })
       }).catch(err=>{
         console.error(err);
       });
@@ -218,8 +215,8 @@ export default {
             }
             self.dialogFormVisible = false
             self.$notify({
-              title: $t('success.title'),
-              message: $t('success.deviceRefresh'),
+              title: self.$t('success.title'),
+              message: self.$t('success.deviceRefresh'),
               type: 'success',
               duration: 2000
             })
@@ -252,13 +249,13 @@ export default {
         self.total = res.data.meta.pagination.total;
         }).catch(err=>{
         console.error(err)
-        self.error = { title: $t('error.title'), message: $t('error.default') }
+        self.error = { title: self.$t('error.title'), message: self.$t('error.default') }
         switch (err.response && err.response.status) {
           case 401:
-            self.error.message = $t('error.auth')
+            self.error.message = self.$t('error.auth')
             break
           case 500:
-            self.error.message = $t('error.service')
+            self.error.message = self.$t('error.service')
             break
         }
         Message.error(self.error);

@@ -11,8 +11,13 @@ class Organization extends Base
 
     protected $fillable = ['name', 'description', 'organization_id'];
 
+    public function getFullNameAttribute($v){
+      return $this->attributes['id']."-".$this->attributes['name'];
+    }
+    
     public function devices(){
       return $this->belongsToMany('App\Models\Device');
+      //return $this->hasMany('App\Models\Device');
     }
 
     public function parent(){

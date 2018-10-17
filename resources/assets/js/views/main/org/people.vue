@@ -137,8 +137,8 @@ export default{
         _.remove(self.peoples,function(p){return p.id == self.dUser.id});
         self.peoples.sort();
         self.$notify({
-          title: $t('success.title'),
-          message: $t('success.removePeople'),
+          title: self.$t('success.title'),
+          message: self.$t('success.removePeople'),
           type: 'success',
           duration: 2000
         })
@@ -155,8 +155,8 @@ export default{
         var param_t = {'org_id': this.current_org, 'user_id': this.iUser.id};
         axios.post('user/invite', param_t).then(res=>{
           self.$notify({
-            title: $t('success.title'),
-            message: $t('success.invitePeople'),
+            title: self.$t('success.title'),
+            message: self.$t('success.invitePeople'),
             type: 'success',
             duration: 2000
           });
@@ -181,7 +181,7 @@ export default{
           self.loading = false;
         }).catch(err=>{
         console.error(err)
-        self.error = { title: $t('error.title'), message: $t('error.default') }
+        self.error = { title: self.$t('error.title'), message: self.$t('error.default') }
 
         self.loading = false;
         Message.error(self.error);
@@ -201,7 +201,7 @@ export default{
         self.total = res.data.meta.pagination.total;
         }).catch(err=>{
         console.error(err)
-        self.error = { title: $t('error.title'), message: $t('error.default') }
+        self.error = { title: self.$t('error.title'), message: self.$t('error.default') }
 
         Message.error(this.error);
       });

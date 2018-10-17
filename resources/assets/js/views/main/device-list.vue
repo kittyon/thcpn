@@ -88,8 +88,8 @@ export default {
         self.$ref.devList.attachData();
         self.dialogAttachVisible = false;
         self.$notify({
-          title: '成功',
-          message: '添加设备成功',
+          title: self.$t('success.title'),
+          message: self.$t('success.attachDevice'),
           type: 'success',
           duration: 2000
         })

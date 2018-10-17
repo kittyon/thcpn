@@ -14,6 +14,7 @@ class CreateDeviceOrganizationTable extends Migration
     public function up()
     {
         Schema::create('device_organization', function (Blueprint $table) {
+          $table->increments('id');
           $table->integer('organization_id')->unsigned();
           $table->integer('device_id')->unsigned();
 
@@ -21,8 +22,10 @@ class CreateDeviceOrganizationTable extends Migration
               ->onUpdate('cascade')->onDelete('cascade');
           $table->foreign('device_id')->references('id')->on('devices')
               ->onUpdate('cascade')->onDelete('cascade');
-
-          $table->primary(['organization_id', 'device_id']);
+          $table->softDeletes();
+          $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
+          $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
+          //$table->primary(['organization_id', 'device_id']);
         });
     }
 

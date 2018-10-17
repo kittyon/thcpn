@@ -73,7 +73,7 @@ export default{
   data(){
     var validateDevice = (rule, value, callback)=>{
       if(value.length == 0){
-        callback(new Error($t('error.device')));
+        callback(new Error(this.$t('error.device')));
       }
       else{
         callback();
@@ -81,10 +81,10 @@ export default{
     };
     var validateDate = (rule, value, callback)=>{
       if(value.length < 2){
-        callback(new Error($t('error.date')));
+        callback(new Error(this.$t('error.date')));
       }
       else if(moment(value[1]).diff(moment(value[0]), "days")>30){
-        callback(new Error($t('error.dateRange')));
+        callback(new Error(this.$t('error.dateRange')));
       }
       else{
         callback();
@@ -106,15 +106,15 @@ export default{
       types: types,
       rules:{
         devices:[
-          { required: true, message: $t('error.device'), trigger: 'blur' },
+          { required: true, message: this.$t('error.device'), trigger: 'blur' },
           {validator: validateDevice, trigger: 'blur'}
         ],
         dates:[
-          { required: true, message: $t('error.date'), trigger: 'blur' },
+          { required: true, message: this.$t('error.date'), trigger: 'blur' },
           { validator: validateDate, trigger: 'blur'}
         ],
         contents:[
-          { required: true, message: $t('error.content'), trigger: 'blur' },
+          { required: true, message: this.$t('error.content'), trigger: 'blur' },
 
         ],
 
@@ -163,13 +163,13 @@ export default{
         self.options.device_index = 0;
         }).catch(err=>{
         console.error(err)
-        self.error = { title: $t('error.title'), message: $t('error.default') }
+        self.error = { title: self.$t('error.title'), message: self.$t('error.default') }
         switch (err.response && err.response.status) {
           case 401:
-            self.error.message = $t('error.auth')
+            self.error.message = self.$t('error.auth')
             break
           case 500:
-            self.error.message = $t('error.server')
+            self.error.message = self.$t('error.server')
             break
         }
       });

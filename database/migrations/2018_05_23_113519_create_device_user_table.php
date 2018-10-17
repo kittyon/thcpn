@@ -14,6 +14,7 @@ class CreateDeviceUserTable extends Migration
     public function up()
     {
         Schema::create('device_user', function (Blueprint $table) {
+          $table->increments('id');
           $table->integer('user_id')->unsigned();
           $table->integer('device_id')->unsigned();
 
@@ -21,8 +22,10 @@ class CreateDeviceUserTable extends Migration
               ->onUpdate('cascade')->onDelete('cascade');
           $table->foreign('device_id')->references('id')->on('devices')
               ->onUpdate('cascade')->onDelete('cascade');
-
-          $table->primary(['user_id', 'device_id']);
+          $table->softDeletes();
+          $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
+          $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
+          //$table->primary(['user_id', 'device_id']);
         });
     }
 

@@ -13,11 +13,31 @@ const routers = [
   {
     path:'/register',
     name:'register',
+    redirect: '/register/email'
+    //name:'register',
+    //meta:{
+    //  title: "注册",
+    //  requireAuth:false,
+    //},
+    //component:require('../views/auth/register.vue'),
+  },
+  {
+    path:'/register/email',
+    name:'register-email',
     meta:{
-      title: "注册",
+      title: "注册-邮箱",
       requireAuth:false,
     },
-    component:require('../views/auth/register.vue'),
+    component:require('../views/auth/register-email.vue'),
+  },
+  {
+    path:'/register/phone',
+    name:'register-phone',
+    meta:{
+      title: "注册-电话",
+      requireAuth:false,
+    },
+    component:require('../views/auth/register-phone.vue'),
   },
   {
     path:'/password/reset',
