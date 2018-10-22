@@ -14,7 +14,7 @@ return array(
      *
      *  @type string
      */
-    'domain' => 'thc.test',
+    'domain' => 'localhost',
 
     /*
      * Page title
