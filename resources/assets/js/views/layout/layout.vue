@@ -90,8 +90,8 @@
 
 <script>
   import {mapState} from "vuex";
-  import EuiFooter from './Footer.vue';
-  import NavBar from './NavBar.vue'
+  import EuiFooter from './footer.vue';
+  import NavBar from './navbar.vue'
   import Menu from '../../menu/index';
   import notificationDropDown from '../notifications/notificationDropDown.vue'
   export default {

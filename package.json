@@ -28,9 +28,19 @@
   },
   "dependencies": {
     "date-fns": "^1.29.0",
-    "element-ui": "^2.3.9",
+    "element-ui": "^2.4.8",
+    "highcharts": "^6.2.0",
     "js-cookie": "^2.2.0",
+    "m": "^1.5.1",
+    "moment": "^2.22.2",
+    "v-img": "^0.2.0",
+    "vue-baidu-map": "^0.21.13",
     "vue-cookie": "^1.1.4",
+    "vue-count-to": "^1.0.13",
+    "vue-cron": "^1.0.9",
+    "vue-highcharts": "0.0.10",
+    "vue-i18n": "^8.2.1",
+    "vue-img": "^2.10.0",
     "vue-timeago": "^4.0.2"
   }
 }

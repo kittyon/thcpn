@@ -55,7 +55,7 @@
 </template>
 
 <script>
-import Notification from './Notification'
+import Notification from './notification'
 import {mapState} from "vuex";
 export default {
   components: { Notification },
