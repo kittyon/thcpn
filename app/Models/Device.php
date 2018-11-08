@@ -6,7 +6,7 @@ namespace App\Models;
 class Device extends Base
 {
     //
-    const TABLE = 'devices';
+    const TABLE = 'device';
     protected $table = self::TABLE;
 
     protected $fillable = ['name', 'version', 'iccid'];

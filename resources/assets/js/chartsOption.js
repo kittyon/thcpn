@@ -5,7 +5,15 @@ var defaultOption = {
         type: 'spline', //曲线样式
         animation: highcharts.svg, // don't animate in old IE
         marginRight: 10,
-        zoomType: 'x'
+        zoomType: 'x',
+        //spacingBottom: 2,
+        //spacingTop: 2,
+        spacingLeft: 2,
+        spacingRight: 2,
+        //margin: 0,
+        style:{
+          fontSize: '8px'
+        }
     },
     title: {
         text: ''
@@ -51,10 +59,12 @@ var defaultOption = {
         }
     },
     legend: {
-        enabled: true
-    },
-    exporting: {
-        enabled: true
+        enabled: true,
+        align: 'left',
+        verticalAlign: 'top',
+        floating: true,
+        x: 0,
+        y: 5
     },
     plotOptions: {
         spline: {
@@ -65,11 +75,11 @@ var defaultOption = {
                 states: {
                     hover: {
                         enabled: true,
-                        radius: 1.5
+                        radius: 1
                     }
                 }
             },
-            shadow: false
+            shadow: true
         }
     },
     series: [], //format [{name: "name", data: [[x1,y1],[x2,y2]]},{name: "name", data:[[x1,y1],[x2,y2]]}]

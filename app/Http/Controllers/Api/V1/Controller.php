@@ -24,7 +24,7 @@ class Controller extends BaseController
     }
     public function _index($roles, $where = null, $callback = null)
     {
-      $this->assertPermissions('index', $roles);
+      //$this->assertPermissions('index', $roles);
       if ($where === null) {
           $where = [DB::raw('1'), 1];
       }

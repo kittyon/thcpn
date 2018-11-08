@@ -50,7 +50,9 @@ class DevicesController extends Controller
         //return $this->response->array($this->user()->devices()->get()->toArray());
       }
     }
-
+    public function showth($device_id, Request $request){
+      return $this->response->item(Device::find($device_id), new DevicesTransformer());
+    }
     public function show($device_id, Request $request){
       $org_id = $request->input('org_id');
       if($this->_hasDevice($device_id, $org_id)){

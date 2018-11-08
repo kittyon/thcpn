@@ -26,7 +26,7 @@ class DevicesTransformer extends TransformerAbstract
           'lat' => $device->lat,
           'lon' => $device->lon,
         ];
-        if(is_null($this->perms) && !is_null($device->pivot)){
+        /*if(is_null($this->perms) && !is_null($device->pivot)){
           $roles = array();
           $role_ids = json_decode($device->pivot->urole_ids);
           foreach($role_ids as $role_id){
@@ -41,7 +41,7 @@ class DevicesTransformer extends TransformerAbstract
         }
         else{
           $res['perms'] = $this->perms;
-        }
+        }*/
 
         return $res;
     }

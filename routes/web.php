@@ -15,6 +15,11 @@ Route::get('/', function () {
     return view('welcome');
     //return response('this is version v1');
 });
+
+//taihe branch
+Route::get('/taihe', function(){
+  return view('taihe');
+});
 // Authentication Routes...
 Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
 Route::post('login', 'Auth\LoginController@login');

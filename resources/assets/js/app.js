@@ -17,7 +17,8 @@ import highcharts from 'highcharts';
  */
 import Vuex from 'vuex';
 import VueRouter from 'vue-router';
-import router from './router/index';
+//import router from './router/index';
+import router from './router/taihe';
 import store from './store/index';
 import Config from './config/index';
 import App from './App.vue';

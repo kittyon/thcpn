@@ -45,7 +45,7 @@ export default{
 
                   res[key] = {
                     data:[],
-                    name: device.name + ' - ' + config[key].name||config[key].desc,
+                    name: config[key].desc+" "+config[key].unit,
                     unit: config[key].unit||"",
                     type: config[key].type||""};
                   }
@@ -68,19 +68,19 @@ export default{
         var options = {
             params: query,
         }
-        var uri = '/device/'+device.id+'/datas';
-        var request = axios.get(uri, query).then(function (res) {
+        var uri = '/taihe/device/'+device.id+'/datas';
+        var request = axios.get(uri, options).then(function (res) {
                 callback(null, res.data.data||[]);
             });
 
   },
   getDeviceConfig(device, callback){
-    var uri = '/device/'+device.id+'/config';
+    var uri = '/taihe/device/'+device.id+'/config';
     let request = axios.get(uri).then(res=>{
       callback(null,res.data||{});
     });
-
   },
+
   data2Images(device, data, config, hasList = false){
     var self = this;
     var res = self.data2lists(device, data, config);
@@ -88,6 +88,8 @@ export default{
     return _.filter(res, {type: 'image'});
   },
   data2charts(device, data, config, hasList = false){
+    console.log(config)
+
     var self = this;
     var res;
     if(hasList){
@@ -99,6 +101,7 @@ export default{
     var charts = {};
     _.forIn(res, function(v,k){
       if(v.type == "image") return;
+      if(v.type == "pressure") return;
       var type = v.type;
       charts[k] = charts[k] || _.cloneDeep(defaultOption);
       charts[k].name = charts[k].name|| v.name;
@@ -107,9 +110,7 @@ export default{
             title_v: {
                 text: v.unit
             },
-            title: {
-                text: ''
-            },
+
         }
       });
       var serieData =  _.map(v.data, function (dd) {
@@ -127,7 +128,7 @@ export default{
           })
           serie.data = self.accumlateByTime(serie.data);
       }
-      if (type == 'wind-direction'){
+      /*if (type == 'wind-direction'){
           serie.data = self.averageByTime(serie.data);
           serie.data = _.map(serie.data, function(v){
             return {
@@ -138,7 +139,7 @@ export default{
               height: 26,
             }
           });
-      }
+      }*/
       if (type == 'wind-velocity'){
           serie.data = self.averageByTime(serie.data);
       }
@@ -171,22 +172,22 @@ export default{
       return self.getMarkers()[Math.floor(v/22.5)];
     },
     getMarkers(){
-      return ['url(/image/north.png)',
-      'url(/image/east_north.png)',
-      'url(/image/east_north.png)',
-      'url(/image/east.png)',
-      'url(/image/east.png)',
-      'url(/image/east_south.png)',
-      'url(/image/east_south.png)',
-      'url(/image/south.png)',
-      'url(/image/south.png)',
-      'url(/image/west_south.png)',
-      'url(/image/west_south.png)',
-      'url(/image/west.png)',
-      'url(/image/west.png)',
-      'url(/image/west_north.png)',
-      'url(/image/west_north.png)',
-      'url(/image/north.png)',
+      return ['url(/images/north.png)',
+      'url(/images/east_north.png)',
+      'url(/images/east_north.png)',
+      'url(/images/east.png)',
+      'url(/images/east.png)',
+      'url(/images/east_south.png)',
+      'url(/images/east_south.png)',
+      'url(/images/south.png)',
+      'url(/images/south.png)',
+      'url(/images/west_south.png)',
+      'url(/images/west_south.png)',
+      'url(/images/west.png)',
+      'url(/images/west.png)',
+      'url(/images/west_north.png)',
+      'url(/images/west_north.png)',
+      'url(/images/north.png)',
       ]
     },
 }

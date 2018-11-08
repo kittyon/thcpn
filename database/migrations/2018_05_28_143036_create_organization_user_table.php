@@ -23,7 +23,8 @@ class CreateOrganizationUserTable extends Migration
           $table->foreign('user_id')->references('id')->on('users')
               ->onUpdate('cascade')->onDelete('cascade');
           $table->softDeletes();
-          $table->timestamps();
+          $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
+          $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
 
           //$table->primary(['organization_id', 'user_id']);
         });

@@ -8,6 +8,8 @@ use App\Models\Device;
 use App\Transformers\DeviceConfigTransformer;
 use App\Http\Requests\Api\DataConfigRequest;
 use App\Models\Urole;
+use Illuminate\Support\Facades\Log;
+
 
 class DeviceConfigController extends Controller
 {
@@ -18,6 +20,10 @@ class DeviceConfigController extends Controller
       'show' =>['dev_r']
     ];
     //
+    public function lastth($device_id, Request $request){
+      
+      return $this->response->item(Device::find($device_id)->config()->first(), new DeviceConfigTransformer());
+    }
     public function last($device_id, Request $request){
       $org_id = $request->input('org_id');
 

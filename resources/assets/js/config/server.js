@@ -1,5 +1,5 @@
 let server = {
-	host: 'http://thc.test',
+	host: 'http://localhost',
 	prefix: '/api',
 	version: 'V1',
 }

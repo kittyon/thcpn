@@ -15,6 +15,18 @@ class DeviceDataController extends Controller
       'index' =>['dev_r']
     ];
     //
+
+    public function indexth($device_id, Request $request){
+      $datas = $this->_index([], ['device_id','=',$device_id],function(&$items)use($request){
+          $items->orderBy('ts', 'asc');
+          if ($request->input('start_at')) {
+              $items->where('ts', '>=', $request->input('start_at'));
+          }
+          if ($request->input('end_at')) {
+              $items->where('ts', '<=', $request->input('end_at'));
+          }});
+      return $this->response->collection($datas, new DeviceDataTransformer());
+    }
     public function index($device_id, Request $request){
 
       //$device_id = $request->input('device_id');
