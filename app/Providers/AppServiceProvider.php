@@ -5,7 +5,7 @@ use App\Models\Device;
 use App\Models\Organization;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Eloquent\Relations\Relation;
-
+use Illuminate\Support\Facades\Schema;
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -17,6 +17,7 @@ class AppServiceProvider extends ServiceProvider
     {
         //
         $this->bootEloquentMorphs();
+        Schema::defaultStringLength(191);
     }
     private function bootEloquentMorphs()
     {
